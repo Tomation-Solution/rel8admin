@@ -7,12 +7,19 @@ import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
    MembersSearch, MembersSearchBtn, MembersSearchCompCon,
     MembersSearchInput } from '../Members/Members.styles'
 import { DuesContainer, DuesHighlight } from './Dues.styles'
+import AddDue from '../Modals/AddDue'
 
 const Dues = () => {
     useEffect(()=>{
       window.scrollTo(0,0)
   },[])
+
   const [deleteModal, setDeleteModal] = useState(false)
+  const [addDueModal, setAddDueModal] = useState(false)
+
+  const displayAddDueModal = () => {
+    setAddDueModal(!addDueModal)
+  }
 
   const displayDeleteModal = () => {
     setDeleteModal(!deleteModal)
@@ -20,6 +27,7 @@ const Dues = () => {
   return (
     <>
       {deleteModal && <DeleteMember close={displayDeleteModal}/>}
+      {addDueModal && <AddDue close={displayAddDueModal}/>}
       <DuesContainer>
           <DuesHighlight>
               <MemberDetBox cirColor={"red"} data={{header:"$20,000", subheader:"Membership"}}/>
@@ -40,7 +48,7 @@ const Dues = () => {
               </MembersSearchBtn>
             </MembersSearchCompCon>
 
-            <AddNewBtn>Add New</AddNewBtn>
+            <AddNewBtn onClick={displayAddDueModal}>Add New</AddNewBtn>
           </MembersSearch>
 
           <MembersPersonList>

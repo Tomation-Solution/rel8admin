@@ -4,19 +4,25 @@ import { DeleteOnly } from '../ActionComponents/ActionComponents1'
 import DeleteMember from '../DashBoard/DeleteMember'
 import { EventsContainer, EventsHeader, EventsList } from '../Events/Events.styles'
 import { AddNewBtn, MembersSearch, MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
+import AddPublications from '../Modals/AddPublications'
 
 const Publications = () => {
     useEffect(()=>{
         window.scrollTo(0,0)
     },[])
     const [deleteModal, setDeleteModal] = useState(false)
+    const [addPublicModal, setAddPublicModal] = useState(false)
   
     const displayDeleteModal = () => {
       setDeleteModal(!deleteModal)
     }
+    const displayPublicModal = () => {
+      setAddPublicModal(!addPublicModal)
+    }
   return (
     <>
     {deleteModal && <DeleteMember close={displayDeleteModal}/>}
+    {addPublicModal && <AddPublications close={displayPublicModal}/>}
     <EventsContainer>
         <EventsHeader>Publications</EventsHeader>
 
@@ -28,7 +34,7 @@ const Publications = () => {
             </MembersSearchBtn>
           </MembersSearchCompCon>
 
-          <AddNewBtn>Add New</AddNewBtn>
+          <AddNewBtn onClick={displayPublicModal}>Add New</AddNewBtn>
         </MembersSearch>
 
         <EventsList>

@@ -53,7 +53,7 @@ const DeleteMember = ({close}) => {
         </style>
         <SubCon>
             <SubConHeader>Delete</SubConHeader>
-            <SubConHeader2>Confirm you wish to  remove user from member list</SubConHeader2>
+            <SubConHeader2>Confirm you wish to remove this item from list</SubConHeader2>
             <SubConBtnHold>
                 <SubConBtn typex="filled">Yes</SubConBtn>
                 <SubConBtn onClick={close}>No</SubConBtn>

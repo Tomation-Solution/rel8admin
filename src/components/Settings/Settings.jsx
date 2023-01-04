@@ -10,7 +10,6 @@ const Settings = () => {
         window.scrollTo(0,0)
     },[])
     const [upload, setUpload] = useState(null)
-    console.log(upload)
 
   return (
     <SettingsContainer>

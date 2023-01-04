@@ -74,7 +74,7 @@ const SubConBtn = styled.input`
     cursor: pointer;
 `
 
-const AddMember = ({close}) => {
+const AddDue = ({close}) => {
     const {register,watch,handleSubmit} = useForm({
         defaultValues: {
             scheduletype:"",
@@ -199,4 +199,4 @@ const AddMember = ({close}) => {
   )
 }
 
-export default AddMember
+export default AddDue

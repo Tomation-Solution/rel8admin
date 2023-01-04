@@ -11,7 +11,7 @@ const Members = () => {
       window.scrollTo(0,0)
   },[])
   const [deleteModal, setDeleteModal] = useState(false)
-
+  
   const displayDeleteModal = () => {
     setDeleteModal(!deleteModal)
   }

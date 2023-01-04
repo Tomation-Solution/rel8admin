@@ -4,6 +4,7 @@ import { DeleteOnly } from '../ActionComponents/ActionComponents1'
 import DeleteMember from '../DashBoard/DeleteMember'
 import { AddNewBtn, MembersSearch, MembersSearchBtn,
    MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
+import AddEvent from '../Modals/AddEvent'
 import { EventsContainer, EventsHeader, EventsList } from './Events.styles'
 
 const Events = () => {
@@ -11,14 +12,19 @@ const Events = () => {
       window.scrollTo(0,0)
   },[])
   const [deleteModal, setDeleteModal] = useState(false)
+  const [addEvent, setAddEvent] = useState(false)
 
   const displayDeleteModal = () => {
     setDeleteModal(!deleteModal)
+  }
+  const displayAddEvent = () => {
+    setAddEvent(!addEvent)
   }
 
   return (
     <>
       {deleteModal && <DeleteMember close={displayDeleteModal}/>}
+      {addEvent && <AddEvent close={displayAddEvent}/>}
       <EventsContainer>
           <EventsHeader>Events</EventsHeader>
 
@@ -30,7 +36,7 @@ const Events = () => {
               </MembersSearchBtn>
             </MembersSearchCompCon>
 
-            <AddNewBtn>Add New</AddNewBtn>
+            <AddNewBtn onClick={displayAddEvent}>Add New</AddNewBtn>
           </MembersSearch>
 
           <EventsList>
