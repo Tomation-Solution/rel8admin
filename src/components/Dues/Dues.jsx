@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
-import { EditDeletOnly } from '../ActionComponents/ActionComponents1'
+import { DeleteOnly } from '../ActionComponents/ActionComponents1'
+import DeleteMember from '../DashBoard/DeleteMember'
 import MemberDetBox from '../DashBoard/MemberDetBox'
 import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
    MembersSearch, MembersSearchBtn, MembersSearchCompCon,
@@ -8,34 +9,45 @@ import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
 import { DuesContainer, DuesHighlight } from './Dues.styles'
 
 const Dues = () => {
+    useEffect(()=>{
+      window.scrollTo(0,0)
+  },[])
+  const [deleteModal, setDeleteModal] = useState(false)
+
+  const displayDeleteModal = () => {
+    setDeleteModal(!deleteModal)
+  }
   return (
-    <DuesContainer>
-        <DuesHighlight>
-            <MemberDetBox cirColor={"red"} data={{header:"$20,000", subheader:"Membership"}}/>
-            <MemberDetBox data={{header:"$20,000", subheader:"Membership"}}/>
-            <MemberDetBox data={{header:"$20,000", subheader:"Membership"}}/>
-        </DuesHighlight>
+    <>
+      {deleteModal && <DeleteMember close={displayDeleteModal}/>}
+      <DuesContainer>
+          <DuesHighlight>
+              <MemberDetBox cirColor={"red"} data={{header:"$20,000", subheader:"Membership"}}/>
+              <MemberDetBox data={{header:"$20,000", subheader:"Membership"}}/>
+              <MemberDetBox data={{header:"$20,000", subheader:"Membership"}}/>
+          </DuesHighlight>
 
-        <MembersPersonTab typex="dues">
-          <MembersPersons typex="dues">All Dues</MembersPersons>
-          <MembersPersons>Members Owning</MembersPersons>
-        </MembersPersonTab>
+          <MembersPersonTab typex="dues">
+            <MembersPersons typex="dues">All Dues</MembersPersons>
+            <MembersPersons>Members Owning</MembersPersons>
+          </MembersPersonTab>
 
-        <MembersSearch>
-          <MembersSearchCompCon>
-            <MembersSearchInput placeholder='Search'/>
-            <MembersSearchBtn>
-              <SearchIcon style={{width:"15px",height:"15x"}}/>
-            </MembersSearchBtn>
-          </MembersSearchCompCon>
+          <MembersSearch>
+            <MembersSearchCompCon>
+              <MembersSearchInput placeholder='Search'/>
+              <MembersSearchBtn>
+                <SearchIcon style={{width:"15px",height:"15x"}}/>
+              </MembersSearchBtn>
+            </MembersSearchCompCon>
 
-          <AddNewBtn>Add New</AddNewBtn>
-        </MembersSearch>
+            <AddNewBtn>Add New</AddNewBtn>
+          </MembersSearch>
 
-        <MembersPersonList>
-            <EditDeletOnly />
-        </MembersPersonList>
-    </DuesContainer>
+          <MembersPersonList>
+              <DeleteOnly deleteFn={displayDeleteModal}/>
+          </MembersPersonList>
+      </DuesContainer>
+    </>
   )
 }
 

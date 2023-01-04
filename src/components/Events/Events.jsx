@@ -1,31 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
-import { NoAction } from '../ActionComponents/ActionComponents1'
+import { DeleteOnly } from '../ActionComponents/ActionComponents1'
+import DeleteMember from '../DashBoard/DeleteMember'
 import { AddNewBtn, MembersSearch, MembersSearchBtn,
    MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
 import { EventsContainer, EventsHeader, EventsList } from './Events.styles'
 
 const Events = () => {
+    useEffect(()=>{
+      window.scrollTo(0,0)
+  },[])
+  const [deleteModal, setDeleteModal] = useState(false)
+
+  const displayDeleteModal = () => {
+    setDeleteModal(!deleteModal)
+  }
+
   return (
-    <EventsContainer>
-        <EventsHeader>Events</EventsHeader>
+    <>
+      {deleteModal && <DeleteMember close={displayDeleteModal}/>}
+      <EventsContainer>
+          <EventsHeader>Events</EventsHeader>
 
-        <MembersSearch>
-          <MembersSearchCompCon>
-            <MembersSearchInput placeholder='Search'/>
-            <MembersSearchBtn>
-              <SearchIcon style={{width:"15px",height:"15x"}}/>
-            </MembersSearchBtn>
-          </MembersSearchCompCon>
+          <MembersSearch>
+            <MembersSearchCompCon>
+              <MembersSearchInput placeholder='Search'/>
+              <MembersSearchBtn>
+                <SearchIcon style={{width:"15px",height:"15x"}}/>
+              </MembersSearchBtn>
+            </MembersSearchCompCon>
 
-          <AddNewBtn>Add New</AddNewBtn>
-        </MembersSearch>
+            <AddNewBtn>Add New</AddNewBtn>
+          </MembersSearch>
 
-        <EventsList>
-            <NoAction />
-        </EventsList>
+          <EventsList>
+              <DeleteOnly deleteFn={displayDeleteModal}/>
+          </EventsList>
 
-    </EventsContainer>
+      </EventsContainer>
+    </>
   )
 }
 

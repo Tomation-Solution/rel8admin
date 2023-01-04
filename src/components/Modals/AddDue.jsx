@@ -24,10 +24,20 @@ const FormData = styled.input`
     border: none;
     border-bottom: 1px solid ${rel8Purple};
     color: ${rel8Purple};
+    outline: none;
     &::placeholder{
         color: ${rel8Purple};
     }
+    margin: 10px 0px;
 `
+const FormSelection = styled.select`
+    padding: 10px;
+    color: ${rel8Purple};
+    outline: none;
+    border: none;
+    border-bottom: 1px solid ${rel8Purple};
+`
+const FormOption = styled.option``
 const SubCon = styled.div`
     background-color: ${rel8White};
     width: 250px;
@@ -36,11 +46,6 @@ const SubCon = styled.div`
 `
 const SubConHeader = styled.p`
     font-weight: 700;
-    text-align: center;
-`
-const SubConHeader2 = styled.p`
-    margin-top: 20px;
-    margin-bottom: 20px;
     text-align: center;
 `
 const SubConBtnHold = styled.div`
@@ -69,14 +74,28 @@ const AddMember = ({close}) => {
     <SubCon>
         <SubConHeader>Add Member</SubConHeader>
         <Form>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
-            <FormData placeholder='Enter Data' type={"text"}/>
+        {/* "name":"by 5:00 am for real",
+        "re_occuring":true,
+        "is_for_excos":false,
+        "amount":"50.00",
+        "startDate":"2022-7-13",
+        "startTime":"03:00",
+        "scheduletype":"day_of_week",
+        "schedule":["0","1","2","3"] */}
+            <FormData placeholder='Due Name' type={"text"}/>
+            <FormSelection defaultValue={"default"}>
+                <FormOption disabled value={"default"}>Is Reoccuring</FormOption>
+                <FormOption>Yes</FormOption>
+                <FormOption>No</FormOption>
+            </FormSelection>
+            <FormSelection defaultValue={"default"}>
+                <FormOption disabled value={"default"}>For Excos</FormOption>
+                <FormOption>Yes</FormOption>
+                <FormOption>No</FormOption>
+            </FormSelection>
+            <FormData placeholder='Due Amount' type={"text"}/>
+            <FormData placeholder='Due Start Date' type={"date"}/>
+            <FormData placeholder='Due Start Time' type={"text"}/>
         </Form>
         <SubConBtnHold>
             <SubConBtn typex="filled">Add</SubConBtn>

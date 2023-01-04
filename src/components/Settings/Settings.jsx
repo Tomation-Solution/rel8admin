@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SettingsContainer, SettingsHeader, SettingsSubHeader,
      SettingsUpload, SettingsUploadCon, SettingsUploadImg,
       SettingsUploadInput, SettingsUploadLabel } from './Settings.styles'
@@ -6,6 +6,9 @@ import UploadImage from '../../assets/UploadImage.png'
 import { useState } from 'react'
 
 const Settings = () => {
+    useEffect(()=>{
+        window.scrollTo(0,0)
+    },[])
     const [upload, setUpload] = useState(null)
     console.log(upload)
 

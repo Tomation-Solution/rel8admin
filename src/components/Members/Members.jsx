@@ -1,37 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
-import { EditDeleteWriteOnly } from '../ActionComponents/ActionComponents1'
+import { DeleteOnly } from '../ActionComponents/ActionComponents1'
 import DeleteMember from '../DashBoard/DeleteMember'
-import AddMember from './AddMember'
-import EditMember from './EditMember'
-import { AddNewBtn, MembersContainer, MembersPaginationCon, MembersPaginationItem,
+import { MembersContainer, MembersPaginationCon, MembersPaginationItem,
    MembersPersonList, MembersPersons, MembersPersonTab, MembersSearch,
     MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from './Members.styles'
 
 const Members = () => {
+    useEffect(()=>{
+      window.scrollTo(0,0)
+  },[])
   const [deleteModal, setDeleteModal] = useState(false)
-  const [editModal, setEditModal] = useState(false)
-  const [addModal, setAddModal] = useState(false)
 
   const displayDeleteModal = () => {
     setDeleteModal(!deleteModal)
   }
-  const displayEditModal = () => {
-    setEditModal(!editModal)
-  }
-  const displayAddModal = () => {
-    setAddModal(!addModal)
-  }
   return (
     <>
     {deleteModal && <DeleteMember close={displayDeleteModal}/>}
-    {editModal && <EditMember close={displayEditModal}/>}
-    {addModal && <AddMember close={displayAddModal}/>}
       <MembersContainer>
         <MembersPersonTab typex="dues">
-          <MembersPersons>All Members</MembersPersons>
-          <MembersPersons>Exco Members</MembersPersons>
-          <MembersPersons>Committe Members</MembersPersons>
+          <MembersPersons typex="dues">All Members</MembersPersons>
+          <MembersPersons typex="dues">Exco Members</MembersPersons>
+          <MembersPersons typex="dues">Committe Members</MembersPersons>
+          <MembersPersons typex="dues">All Chapters</MembersPersons>
         </MembersPersonTab>
 
         <MembersSearch>
@@ -42,11 +34,11 @@ const Members = () => {
             </MembersSearchBtn>
           </MembersSearchCompCon>
 
-          <AddNewBtn>Add New</AddNewBtn>
+          {/* <AddNewBtn>Add New</AddNewBtn> */}
         </MembersSearch>
 
         <MembersPersonList>
-          <EditDeleteWriteOnly deleteFn={displayDeleteModal} editFn={displayEditModal} writeFn={displayAddModal}/>
+          <DeleteOnly deleteFn={displayDeleteModal}/>
         </MembersPersonList>
 
         <MembersPaginationCon>
