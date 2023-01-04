@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { rel8LightPink, rel8Pink, rel8Purple, rel8White } from "../../globals";
-import { Laptop, mobile, tablet } from "../../responsive";
+import { rel8Pink, rel8Purple, rel8White } from "../../globals";
+import { mobile, tablet } from "../../responsive";
 
 export const MembersContainer = styled.div`
     margin-top: 67px;

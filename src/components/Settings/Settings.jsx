@@ -1,5 +1,7 @@
 import React from 'react'
-import { SettingsContainer, SettingsHeader, SettingsSubHeader, SettingsUpload, SettingsUploadCon, SettingsUploadImg, SettingsUploadInput, SettingsUploadLabel } from './Settings.styles'
+import { SettingsContainer, SettingsHeader, SettingsSubHeader,
+     SettingsUpload, SettingsUploadCon, SettingsUploadImg,
+      SettingsUploadInput, SettingsUploadLabel } from './Settings.styles'
 import UploadImage from '../../assets/UploadImage.png'
 import { useState } from 'react'
 

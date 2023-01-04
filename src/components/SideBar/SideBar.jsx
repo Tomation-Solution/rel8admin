@@ -1,6 +1,9 @@
 import React from 'react'
-import { DashBoardIcon, DuesIcon, EventsIcon, LogoOutIcon, NewsIcon, NotificationIcon, SettingsIcon, UsersIcon } from '../../assets/SideBar/svgs'
-import { CloseSlider, Hamburger, SideBarContainer, SideBarContainer2, SideBarItem, SideBarItemCon, SideBarLogo, SideBarLogoCon, TopNav, TopNavIcons, TopNavTitle } from './SideBar.styles'
+import { DashBoardIcon, DuesIcon, EventsIcon, LogoOutIcon, NewsIcon,
+     NotificationIcon, SettingsIcon, UsersIcon } from '../../assets/SideBar/svgs'
+import { CloseSlider, Hamburger, SideBarContainer, SideBarContainer2,
+     SideBarItem, SideBarItemCon, SideBarLogo, SideBarLogoCon,
+      TopNav, TopNavIcons, TopNavTitle } from './SideBar.styles'
 import LogoImage from '../../assets/SideBar/Logo.png'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'

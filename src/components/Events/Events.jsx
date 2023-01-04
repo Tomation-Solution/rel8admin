@@ -1,7 +1,8 @@
 import React from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
 import { NoAction } from '../ActionComponents/ActionComponents1'
-import { AddNewBtn, MembersSearch, MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
+import { AddNewBtn, MembersSearch, MembersSearchBtn,
+   MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
 import { EventsContainer, EventsHeader, EventsList } from './Events.styles'
 
 const Events = () => {

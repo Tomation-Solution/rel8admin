@@ -4,7 +4,9 @@ import { EditDeleteWriteOnly } from '../ActionComponents/ActionComponents1'
 import DeleteMember from '../DashBoard/DeleteMember'
 import AddMember from './AddMember'
 import EditMember from './EditMember'
-import { AddNewBtn, MembersContainer, MembersPaginationCon, MembersPaginationItem, MembersPersonList, MembersPersons, MembersPersonTab, MembersSearch, MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from './Members.styles'
+import { AddNewBtn, MembersContainer, MembersPaginationCon, MembersPaginationItem,
+   MembersPersonList, MembersPersons, MembersPersonTab, MembersSearch,
+    MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from './Members.styles'
 
 const Members = () => {
   const [deleteModal, setDeleteModal] = useState(false)
@@ -26,7 +28,7 @@ const Members = () => {
     {editModal && <EditMember close={displayEditModal}/>}
     {addModal && <AddMember close={displayAddModal}/>}
       <MembersContainer>
-        <MembersPersonTab>
+        <MembersPersonTab typex="dues">
           <MembersPersons>All Members</MembersPersons>
           <MembersPersons>Exco Members</MembersPersons>
           <MembersPersons>Committe Members</MembersPersons>

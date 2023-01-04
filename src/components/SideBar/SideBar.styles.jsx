@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { rel8Blue, rel8Pink, rel8Purple, rel8White } from '../../globals'
+import { rel8Blue, rel8Pink, rel8Purple } from '../../globals'
 import { mobile, tablet } from '../../responsive'
 
 export const TopNav = styled.div`

@@ -2,7 +2,9 @@ import React from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
 import { EditDeletOnly } from '../ActionComponents/ActionComponents1'
 import MemberDetBox from '../DashBoard/MemberDetBox'
-import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab, MembersSearch, MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
+import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
+   MembersSearch, MembersSearchBtn, MembersSearchCompCon,
+    MembersSearchInput } from '../Members/Members.styles'
 import { DuesContainer, DuesHighlight } from './Dues.styles'
 
 const Dues = () => {
