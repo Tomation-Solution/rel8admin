@@ -10,9 +10,12 @@ import { Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-route
 import { rel8Purple, rel8White } from '../../globals'
 import { useEffect } from 'react'
 import { useQueryClient } from 'react-query'
+import { toast } from 'react-toastify'
+
 
 const CustNavLink = ({where,children}) => (
-    <NavLink to={where} style={({ isActive }) => ({ color: isActive ? `${rel8White}` : `${rel8Purple}`, backgroundColor: isActive ? `${rel8Purple}` : ""})}>
+    <NavLink to={where} style={({ isActive }) => ({ color: isActive ? `${rel8White}` : `${rel8Purple}`, 
+    backgroundColor: isActive ? `${rel8Purple}` : ""})}>
         {children}
     </NavLink>
 )
@@ -29,6 +32,7 @@ const SideBar = () => {
     const navigate = useNavigate()
 
     const logoutHandler = () => {
+        toast.success("Logout successful", {progressClassName:"toastProgress",icon:false})
         queryClient.setQueryData("user", null)
         localStorage.removeItem("user")
         localStorage.removeItem("shortName")

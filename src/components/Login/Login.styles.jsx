@@ -64,7 +64,7 @@ export const LoginSubConBtn = styled.input`
 `
 
 export const LoginErrorContainer = styled.p`
-    background-color: ${rel8Purple};
+    background-color: #c73232;
     color: white;
     font-size: 14px;
     text-align: center;

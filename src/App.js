@@ -13,6 +13,8 @@ import Publications from "./components/Publications/Publications";
 import Settings from "./components/Settings/Settings";
 import SideBar from "./components/SideBar/SideBar";
 import NotFound from "./NotFound/NotFound";
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const adminDetails = JSON.parse( localStorage.getItem("user"))
 
@@ -21,6 +23,7 @@ function App() {
   queryClient.setQueryData("user", adminDetails)
   return (
     <>
+    <ToastContainer />
     <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login/>}/>
