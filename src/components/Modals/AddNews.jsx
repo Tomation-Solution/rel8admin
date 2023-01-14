@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
+import { mobile } from '../../responsive'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -63,11 +64,17 @@ const FormLabel =  styled.label`
 `
 const SubCon = styled.div`
     background-color: ${rel8White};
-    width: 250px;
+    width: 350px;
     height: 500px;
     border-radius: 10px;
     padding: 20px;
     overflow-y: auto;
+
+    ${
+        mobile({
+            width: "250px",
+        })
+    }
 `
 const SubConHeader = styled.p`
     font-weight: 700;

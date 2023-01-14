@@ -16,6 +16,7 @@ export const DashBoardContainer = styled.div`
             marginTop: "0px",
             marginLeft: "0px",
             flexDirection: "column-reverse",
+            minHeight: "0",
         })
     }
     ${

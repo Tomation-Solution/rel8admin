@@ -164,7 +164,7 @@ export const SideBarItemCon = styled.div`
 export const SideBarItem = styled.div`
     a{
         text-decoration: none;
-        padding: 10px;
+        padding: 5px;
         border-radius: 5px;
         margin-bottom: 10px;
         display: flex;
@@ -173,4 +173,17 @@ export const SideBarItem = styled.div`
         cursor: pointer;
         margin-right: -20px;
     }
+`
+export const LogOutBtn = styled.div`
+        text-decoration: none;
+        padding: 5px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        color: red;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        cursor: pointer;
+        margin-right: -20px;
+        border: 1px solid red;
 `
