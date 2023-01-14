@@ -188,12 +188,10 @@ const SideBar = () => {
                         Settings
                     </CustNavLink>
                 </SideBarItem>
-                <SideBarItem>
-                    <CustNavLink where={"/logout"}>
+                <LogOutBtn onClick={logoutHandler}>
                         <LogoOutIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
                         Logout
-                    </CustNavLink>
-                </SideBarItem>
+                </LogOutBtn>
             </SideBarItemCon>
         </SideBarContainer2>
         

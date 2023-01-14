@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { rel8Pink, rel8Purple, rel8White } from "../../globals";
+import { mobile } from "../../responsive";
 
 export const LoginContainer = styled.div`
     display: flex;
@@ -12,6 +13,13 @@ export const LoginSubContainer = styled.div`
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
+    width: 50%;
+
+    ${
+        mobile({
+            width: "70%",
+        })
+    }
 `
 export const LoginSubHeader =  styled.p`
     font-size: 24px;
@@ -29,7 +37,7 @@ export const FormLabel =  styled.label`
     flex-direction: column;
     font-size: 12px;
     margin: 10px 0px;
-    color: ${rel8Purple};
+    word-wrap: break-word;
 `
 export const LoginFormInput = styled.input`
     padding: 5px 0px;
@@ -38,11 +46,7 @@ export const LoginFormInput = styled.input`
     border: 1px solid ${rel8Purple};
     border-radius: 5px;
     padding: 5px;
-    color: ${rel8Purple};
     outline: none;
-    &::placeholder{
-        color: ${rel8Purple};
-    }
 `
 export const LoginSubConBtnHold = styled.div`
     display: flex;
@@ -60,7 +64,7 @@ export const LoginSubConBtn = styled.input`
 `
 
 export const LoginErrorContainer = styled.p`
-    background-color: #c73232;
+    background-color: ${rel8Purple};
     color: white;
     font-size: 14px;
     text-align: center;

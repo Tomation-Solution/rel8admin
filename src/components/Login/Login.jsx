@@ -53,7 +53,7 @@ const Login = () => {
                         </FormLabel>
 
                         <LoginSubConBtnHold>
-                            <LoginSubConBtn type={"submit"} value="Login" typex="filled" loading={isLoading ? "loading":"" }/>
+                            <LoginSubConBtn type={"submit"} value="Login" typex="filled" loading={isLoading ? "loading":"" } disabled={isLoading}/>
                         </LoginSubConBtnHold>
                     </LoginForms>
             </LoginSubContainer>
