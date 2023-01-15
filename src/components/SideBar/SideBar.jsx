@@ -9,8 +9,8 @@ import { useState } from 'react'
 import { Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { rel8Purple, rel8White } from '../../globals'
 import { useEffect } from 'react'
-import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
+import { userStore } from '../../zustand/stores'
 
 
 const CustNavLink = ({where,children}) => (
@@ -25,22 +25,20 @@ const SideBar = () => {
         window.scrollTo(0,0)
     },[])
     const [sideIsOpen,openSide] = useState(false)
-    const queryClient = useQueryClient()
     const location = useLocation()
 
-    const user = queryClient.getQueryData("user")
+    const userInfo = userStore((state) => state.user)
+    const clearUser = userStore((state) => state.delUser)
     const navigate = useNavigate()
 
     const logoutHandler = () => {
         toast.success("Logout successful", {progressClassName:"toastProgress",icon:false})
-        queryClient.setQueryData("user", null)
-        localStorage.removeItem("user")
-        localStorage.removeItem("shortName")
+        clearUser()
         navigate('/login')
     }
 
 
-    if(!user) {
+    if(!userInfo) {
         return <Navigate to={'/login'} state={{ from: location.pathname }}/>
     }
     

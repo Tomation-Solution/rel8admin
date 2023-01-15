@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { useForm } from 'react-hook-form'
 import { mobile } from '../../responsive'
+import { createDues } from '../../utils/api-calls'
+import { useMutation } from 'react-query'
+import { toast } from 'react-toastify'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -88,7 +91,24 @@ const AddDue = ({close}) => {
             schedule:[]
         }
     })
-    const onSubmit = data => console.log(data);
+
+    const {isLoading:createLoading, isFetching:createFetching, error:createError, mutate} = useMutation(()=>createDues(), {
+        onSuccess: () => {
+            toast.success("Due Created",{progressClassName:"toastProgress",icon:false})
+            close()
+        },
+        onError: () => {
+            toast.error("Could not create due")
+        }
+    })
+
+    
+
+
+    const onSubmit = (duesData) => {
+        mutate(duesData)
+    };
+    
   return (
     <BackDrop>
     <style>
@@ -125,6 +145,11 @@ const AddDue = ({close}) => {
             </FormLabel>
             
             <FormLabel>
+                Alumni Year:
+                <FormData type={"date"} {...register("alumni_year", {required:true})}/>
+            </FormLabel>
+
+            <FormLabel>
                 Amount:
                 <FormData min={0} type={"number"} {...register("amount", {
                     required:true,
@@ -143,7 +168,7 @@ const AddDue = ({close}) => {
                 <FormData type={"time"} {...register("startTime", {required:true})}/>
             </FormLabel>
             
-            {watch("re_occuring") === "true" && <>
+            
             <FormLabel>
                 Schedule Type:
                 <FormSelection defaultValue={""} {...register("scheduletype", {required:true})}>
@@ -195,7 +220,7 @@ const AddDue = ({close}) => {
                     </FormSelection>
                 </>
             }
-            </>}
+            
             <SubConBtnHold>
                 <SubConBtn type={"submit"} value="Add" typex="filled"/>
                 <SubConBtn type={"submit"} value="Cancel" onClick={close}/>

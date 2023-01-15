@@ -1,18 +1,20 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation } from 'react-query'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { loginUser } from '../../utils/api-calls'
 import { FormLabel, LoginContainer, LoginErrorContainer, LoginFormInput, LoginForms,
      LoginSubConBtn, LoginSubConBtnHold, LoginSubContainer, LoginSubHeader } from './Login.styles'
 import { toast } from 'react-toastify';
+import { userStore } from '../../zustand/stores'
 
 
 const Login = () => {
     const { register, handleSubmit } = useForm()
     const navigate = useNavigate()
     const location = useLocation()
-    const queryClient = useQueryClient()
+    const setUser = userStore((state) => state.setUser)
+    const userInfo = userStore((state) => state.user)
 
     const from = location?.state?.from || '/'
     
@@ -20,8 +22,7 @@ const Login = () => {
         onSuccess:  (data, context) => {
             toast.success(`Welcome ${data?.user_type}`, {progressClassName:"toastProgress",icon:false})
             localStorage.setItem("shortName", JSON.stringify(context.shortName))
-            localStorage.setItem("user", JSON.stringify(data))
-            queryClient.setQueryData("user", data)
+            setUser(data)
             navigate(from)
         },
     })
@@ -30,9 +31,8 @@ const Login = () => {
         mutate(userCredentials)
     }
 
-    const user = queryClient.getQueryData("user")
 
-    if(user) {
+    if(userInfo) {
         return <Navigate to="/"/>
     }
     return (

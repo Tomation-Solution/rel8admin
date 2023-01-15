@@ -1,4 +1,3 @@
-import { useQueryClient } from "react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Committee from "./components/Committee/Committee";
 import DashBoard from "./components/DashBoard/DashBoard";
@@ -12,21 +11,17 @@ import News from "./components/News/News";
 import Publications from "./components/Publications/Publications";
 import Settings from "./components/Settings/Settings";
 import SideBar from "./components/SideBar/SideBar";
-import NotFound from "./NotFound/NotFound";
+import NotFound from "./components/NotFound/NotFound";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const adminDetails = JSON.parse( localStorage.getItem("user"))
-
 function App() {
-  const queryClient = useQueryClient()
-  queryClient.setQueryData("user", adminDetails)
   return (
     <>
     <ToastContainer />
     <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login/>}/>
+              <Route path="/login" element={<Login/>}/>
               <Route element={<SideBar/>}>
                   <Route path="/" element={<DashBoard />}/>
                   <Route path="/members" element={<Members />} />

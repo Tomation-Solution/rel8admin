@@ -9,6 +9,8 @@ import { DashBoardContainer, DashBoardHeaders, DashBoardHeadersItem, DashBoardLe
 import DeleteMember from './DeleteMember'
 import MemberDetBox from './MemberDetBox'
 import AddDue from '../Modals/AddDue'
+import { useQuery } from 'react-query'
+import { getAllExcos } from '../../utils/api-calls'
 
 const DashBoard = () => {
     useEffect(()=>{
@@ -23,6 +25,12 @@ const DashBoard = () => {
   const displayAddDueModal = () => {
     setAddDueModal(!addDueModal)
   }
+
+  const { isLoading:excoLoading, isFetching:excoFetching, data:excoData } = useQuery('all-excos', getAllExcos,{
+    refetchOnWindowFocus:false,
+  })
+
+  console.log(excoData)
   return (
     <>
     

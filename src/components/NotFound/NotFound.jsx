@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { rel8LightPink, rel8Purple } from '../globals'
+import { rel8LightPink, rel8Purple } from '../../globals'
 
 const Container = styled.div`
     display: flex;

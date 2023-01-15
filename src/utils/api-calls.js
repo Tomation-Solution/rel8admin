@@ -1,6 +1,7 @@
-import axios from "axios"
-// import { privateRequest } from "./axios-utils"
+import axios, { AxiosError } from "axios"
+import { privateRequest } from "./axios-utils"
 
+//LOGIN
 export const loginUser = async (user) => {
     try{
         const { shortName, ...payload } = user
@@ -24,3 +25,35 @@ export const loginUser = async (user) => {
     
     // {email: 'dbadebayo@mail.com', password: 'buka2020backup@'}
 }
+
+//DUES
+export const getAllDues = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/dues/AdminManageDue/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+export const createDues = async (dueData) => {
+    try{
+        const res = await privateRequest.post('/tenant/dues/AdminManageDue/', dueData)
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+
+//EXCOS
+export const getAllExcos = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_exco/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+//MEMBERS

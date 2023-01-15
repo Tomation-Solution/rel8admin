@@ -8,6 +8,10 @@ import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
     MembersSearchInput } from '../Members/Members.styles'
 import { DuesContainer, DuesHighlight } from './Dues.styles'
 import AddDue from '../Modals/AddDue'
+import Loading from '../Loading/Loading'
+import { useQuery } from 'react-query'
+import { getAllDues } from '../../utils/api-calls'
+import { toast } from 'react-toastify'
 
 const Dues = () => {
     useEffect(()=>{
@@ -24,6 +28,14 @@ const Dues = () => {
   const displayDeleteModal = () => {
     setDeleteModal(!deleteModal)
   }
+
+  const {isLoading, isFetching, error, data} = useQuery("all-dues", getAllDues, {
+    refetchOnWindowFocus: false,
+    onError: () => {
+      toast.error("An error occurred while fetching dues")
+    }
+  })
+
   return (
     <>
       {deleteModal && <DeleteMember close={displayDeleteModal}/>}
@@ -35,25 +47,31 @@ const Dues = () => {
               <MemberDetBox data={{header:"$20,000", subheader:"Membership"}}/>
           </DuesHighlight>
 
-          <MembersPersonTab typex="dues">
-            <MembersPersons typex="dues">All Dues</MembersPersons>
-            <MembersPersons>Members Owning</MembersPersons>
-          </MembersPersonTab>
+          {
+            (isLoading||isFetching) ? <Loading loading={isLoading}/> : 
+          <>
+            <MembersPersonTab typex="dues">
+              <MembersPersons typex="dues">All Dues</MembersPersons>
+              <MembersPersons>Members Owning</MembersPersons>
+            </MembersPersonTab>
 
-          <MembersSearch>
-            <MembersSearchCompCon>
-              <MembersSearchInput placeholder='Search'/>
-              <MembersSearchBtn>
-                <SearchIcon style={{width:"15px",height:"15x"}}/>
-              </MembersSearchBtn>
-            </MembersSearchCompCon>
+            <MembersSearch>
+              <MembersSearchCompCon>
+                <MembersSearchInput placeholder='Search'/>
+                <MembersSearchBtn>
+                  <SearchIcon style={{width:"15px",height:"15x"}}/>
+                </MembersSearchBtn>
+              </MembersSearchCompCon>
 
-            <AddNewBtn onClick={displayAddDueModal}>Add New</AddNewBtn>
-          </MembersSearch>
+              <AddNewBtn onClick={displayAddDueModal}>Add New</AddNewBtn>
+            </MembersSearch>
 
-          <MembersPersonList>
-              <DeleteOnly deleteFn={displayDeleteModal}/>
-          </MembersPersonList>
+            <MembersPersonList>
+                <DeleteOnly deleteFn={displayDeleteModal}/>
+            </MembersPersonList>
+          </>
+
+        }
       </DuesContainer>
     </>
   )
