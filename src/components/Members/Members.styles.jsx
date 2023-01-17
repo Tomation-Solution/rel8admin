@@ -35,6 +35,17 @@ export const MembersPersons = styled.span`
     font-weight: 600;
     cursor: pointer;
     margin-right: ${props=>props.typex==="dues" ? "20px":""};
+    position: relative;
+    &::after{
+        content: "";
+        height: 2px;
+        background-color: ${rel8Purple};
+        width: 100%;
+        display: ${props=>props.filled==="show" ? "block": "none"};
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
     ${
         mobile({
             marginBottom: "10px",

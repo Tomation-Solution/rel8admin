@@ -49,7 +49,7 @@ export const createDues = async (dueData) => {
 //EXCOS
 export const getAllExcos = async () => {
     try{
-        const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_exco/')
+        const res = await privateRequest.get('/tenant/user/ManageAssigningExos/')
         return res.data
     }catch(e){
         throw new AxiosError(e)
@@ -57,3 +57,21 @@ export const getAllExcos = async () => {
 }
 
 //MEMBERS
+export const getAllMembers = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_members/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+//NEEDS ENDPOINT
+export const getMemberDues = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_members/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { DuesIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
-import { DeleteOnly } from '../ActionComponents/ActionComponents1'
+import { ExcoDelTable, MemberDelTable } from '../ActionComponents/ActionComponents1'
 import { DashBoardContainer, DashBoardHeaders, DashBoardHeadersItem, DashBoardLeft,
    DashBoardMemberCon, DashBoardPersons, DashBoardRight, DashBoardRightCon,
     DashBoardRightDue, DashBoardRightDueButton,
@@ -10,7 +10,8 @@ import DeleteMember from './DeleteMember'
 import MemberDetBox from './MemberDetBox'
 import AddDue from '../Modals/AddDue'
 import { useQuery } from 'react-query'
-import { getAllExcos } from '../../utils/api-calls'
+import { getAllExcos, getAllMembers } from '../../utils/api-calls'
+import Loading from '../Loading/Loading'
 
 const DashBoard = () => {
     useEffect(()=>{
@@ -18,6 +19,7 @@ const DashBoard = () => {
   },[])
   const [showModal, setModal] = useState(false)
   const [addDueModal, setAddDueModal] = useState(false)
+  const [options, setOptions] = useState("exco")
 
   const displayModal = () => {
     setModal(!showModal)
@@ -26,11 +28,15 @@ const DashBoard = () => {
     setAddDueModal(!addDueModal)
   }
 
-  const { isLoading:excoLoading, isFetching:excoFetching, data:excoData } = useQuery('all-excos', getAllExcos,{
+  const { isLoading:excoLoading, isFetching:excoFetching, data:excoData, isError:excoIsError } = useQuery('all-excos', getAllExcos,{
     refetchOnWindowFocus:false,
+  })
+  const { isLoading:memLoading, isFetching:memFetching, data:memData, isError:memIsError } = useQuery('all-members', getAllMembers, {
+    refetchOnWindowFocus:false 
   })
 
   console.log(excoData)
+  console.log(memData)
   return (
     <>
     
@@ -47,11 +53,17 @@ const DashBoard = () => {
 
         <DashBoardPersons>
           <DashBoardHeaders>
-            <DashBoardHeadersItem>Excos</DashBoardHeadersItem>
-            <DashBoardHeadersItem>Members</DashBoardHeadersItem>
+            <DashBoardHeadersItem onClick={()=>setOptions("exco")} filled={options === "exco" ? "show" : ""}>Excos</DashBoardHeadersItem>
+            <DashBoardHeadersItem onClick={()=>setOptions("mem")} filled={options === "mem" ? "show" : ""}>Members</DashBoardHeadersItem>
           </DashBoardHeaders>
 
-          <DeleteOnly deleteFn={displayModal}/>
+          {
+            options==="exco" ? 
+            (excoLoading || excoFetching) ? <Loading loading={excoLoading}/> : (!excoIsError) ? (<MemberDelTable deleteFn={displayModal}/>) : <small>cant fetch excos</small>
+            : 
+            (memLoading || memFetching) ? <Loading loading={memLoading}/> : (!memIsError) ? <ExcoDelTable deleteFn={displayModal}/> : <small>cant fetch members</small>
+          }
+
         </DashBoardPersons>
       </DashBoardLeft>
 

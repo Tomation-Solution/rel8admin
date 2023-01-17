@@ -84,6 +84,17 @@ export const DashBoardHeaders = styled.div`
 export const DashBoardHeadersItem = styled.p`
     font-weight: 600;
     margin-right: 20px;
+    position: relative;
+    &::after{
+        content: "";
+        height: 2px;
+        background-color: ${rel8Purple};
+        width: 100%;
+        display: ${props=>props.filled==="show" ? "block": "none"};
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
 `
 
 export const DashBoardRightCon = styled.div`

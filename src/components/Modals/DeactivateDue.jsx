@@ -12,6 +12,7 @@ const BackDrop = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 `
 const SubCon = styled.div`
     background-color: ${rel8White};

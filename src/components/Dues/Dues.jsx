@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
-import { DeleteOnly } from '../ActionComponents/ActionComponents1'
+import { AllDuesDel, DeleteOnly, MemDuesDel } from '../ActionComponents/ActionComponents1'
 import DeleteMember from '../DashBoard/DeleteMember'
 import MemberDetBox from '../DashBoard/MemberDetBox'
 import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
@@ -10,7 +10,7 @@ import { DuesContainer, DuesHighlight } from './Dues.styles'
 import AddDue from '../Modals/AddDue'
 import Loading from '../Loading/Loading'
 import { useQuery } from 'react-query'
-import { getAllDues } from '../../utils/api-calls'
+import { getAllDues, getMemberDues } from '../../utils/api-calls'
 import { toast } from 'react-toastify'
 
 const Dues = () => {
@@ -21,6 +21,8 @@ const Dues = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [addDueModal, setAddDueModal] = useState(false)
 
+  const [options, setOptions] = useState("all")
+
   const displayAddDueModal = () => {
     setAddDueModal(!addDueModal)
   }
@@ -29,12 +31,22 @@ const Dues = () => {
     setDeleteModal(!deleteModal)
   }
 
-  const {isLoading, isFetching, error, data} = useQuery("all-dues", getAllDues, {
+  const {isLoading:allLoading, isFetching:allFetching, isError:allIsError, data:allData} = useQuery("all-dues", getAllDues, {
     refetchOnWindowFocus: false,
     onError: () => {
-      toast.error("An error occurred while fetching dues")
+      toast.error("An error occurred while fetching all dues")
     }
   })
+
+  const {isLoading:memLoading, isFetching:memFetching, isError:memIsError, data:memData} = useQuery("member-dues", getMemberDues, {
+    refetchOnWindowFocus: false,
+    onError: () => {
+      toast.error("An error occurred while fetching member dues")
+    }
+  })
+
+  console.log(allData)
+  console.log(memData)
 
   return (
     <>
@@ -47,12 +59,10 @@ const Dues = () => {
               <MemberDetBox data={{header:"$20,000", subheader:"Membership"}}/>
           </DuesHighlight>
 
-          {
-            (isLoading||isFetching) ? <Loading loading={isLoading}/> : 
-          <>
+
             <MembersPersonTab typex="dues">
-              <MembersPersons typex="dues">All Dues</MembersPersons>
-              <MembersPersons>Members Owning</MembersPersons>
+              <MembersPersons onClick={()=>setOptions("all")} typex="dues" filled={ options === "all" ? "show":"" }>All Dues</MembersPersons>
+              <MembersPersons onClick={()=>setOptions("mem")} filled={ options === "mem" ? "show":"" }>Members Owning</MembersPersons>
             </MembersPersonTab>
 
             <MembersSearch>
@@ -67,11 +77,15 @@ const Dues = () => {
             </MembersSearch>
 
             <MembersPersonList>
-                <DeleteOnly deleteFn={displayDeleteModal}/>
+                {
+                  options === "all" ? 
+                  (allLoading || allFetching) ? <Loading loading={allLoading}/> : (!allIsError) ? <AllDuesDel deleteFn={displayDeleteModal}/> : <p>can't load all dues</p>
+                  :
+                  (memLoading || memFetching) ? <Loading loading={memLoading} /> : (!memIsError) ? <MemDuesDel deleteFn={displayDeleteModal}/> :
+                  <p>can't load member dues</p>
+                }
             </MembersPersonList>
-          </>
 
-        }
       </DuesContainer>
     </>
   )

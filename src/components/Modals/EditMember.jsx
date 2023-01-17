@@ -12,6 +12,7 @@ const BackDrop = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 `
 const Form = styled.form`
     margin: 20px 0px;

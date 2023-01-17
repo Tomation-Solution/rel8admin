@@ -24,6 +24,7 @@ const Login = () => {
             localStorage.setItem("shortName", JSON.stringify(context.shortName))
             setUser(data)
             navigate(from)
+            window.location.reload(true)
         },
     })
 
