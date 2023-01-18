@@ -85,6 +85,7 @@ export const DashBoardHeadersItem = styled.p`
     font-weight: 600;
     margin-right: 20px;
     position: relative;
+    cursor: pointer;
     &::after{
         content: "";
         height: 2px;

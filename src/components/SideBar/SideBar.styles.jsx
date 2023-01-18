@@ -133,6 +133,7 @@ export const SideBarContainer2 = styled.div`
     transition: 0.3s all;
     overflow: auto;
     transform: translate(${props=>props.open ? "0%" : "-100%"});
+    z-index: 10;
 `
 export const CloseSlider = styled.div`
     width: 30px;

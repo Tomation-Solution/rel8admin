@@ -1,9 +1,5 @@
 import axios from "axios";
 
-// const adminDetails = userStore(state => state.user)
-// const TOKEN = adminDetails?.token
-// const SHORT_NAME = adminDetails?.shortName
-
 export const adminDetails = JSON.parse( localStorage.getItem("admin-user"))?.state?.user
 
 const TOKEN = adminDetails?.token

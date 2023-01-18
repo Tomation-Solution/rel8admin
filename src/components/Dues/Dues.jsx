@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { SearchIcon } from '../../assets/SideBar/svgs'
-import { AllDuesDel, DeleteOnly, MemDuesDel } from '../ActionComponents/ActionComponents1'
-import DeleteMember from '../DashBoard/DeleteMember'
+import { AllDuesTable, MemDuesTable } from '../ActionComponents/ActionComponents1'
 import MemberDetBox from '../DashBoard/MemberDetBox'
 import { AddNewBtn, MembersPersonList, MembersPersons, MembersPersonTab,
    MembersSearch, MembersSearchBtn, MembersSearchCompCon,
@@ -12,27 +11,31 @@ import Loading from '../Loading/Loading'
 import { useQuery } from 'react-query'
 import { getAllDues, getMemberDues } from '../../utils/api-calls'
 import { toast } from 'react-toastify'
+import { AllDuesViewMore } from '../ActionComponents/ViewMoreInfo'
 
 const Dues = () => {
     useEffect(()=>{
       window.scrollTo(0,0)
   },[])
 
-  const [deleteModal, setDeleteModal] = useState(false)
+  const [viewMoreDuesInfo, setViewMoreDuesInfo] = useState(false)
   const [addDueModal, setAddDueModal] = useState(false)
+  const [searchValue, setSearchValue] = useState("")
 
+  
   const [options, setOptions] = useState("all")
-
+  
   const displayAddDueModal = () => {
     setAddDueModal(!addDueModal)
   }
-
-  const displayDeleteModal = () => {
-    setDeleteModal(!deleteModal)
+  
+  const displayViewMoreDuesInfo = () => {
+    setViewMoreDuesInfo(!viewMoreDuesInfo)
   }
 
   const {isLoading:allLoading, isFetching:allFetching, isError:allIsError, data:allData} = useQuery("all-dues", getAllDues, {
     refetchOnWindowFocus: false,
+    select: data => data.data,
     onError: () => {
       toast.error("An error occurred while fetching all dues")
     }
@@ -40,17 +43,29 @@ const Dues = () => {
 
   const {isLoading:memLoading, isFetching:memFetching, isError:memIsError, data:memData} = useQuery("member-dues", getMemberDues, {
     refetchOnWindowFocus: false,
+    select: data => data.data,
     onError: () => {
       toast.error("An error occurred while fetching member dues")
     }
   })
 
-  console.log(allData)
-  console.log("memData",memData)
+  const searchHandler = () => {
+    if(options === "all"){
+      const searchPattern = new RegExp(searchValue,"i")
+      const result = allData?.filter(item => (item.Name.search(searchPattern) >= 0))
+      return result
+    }
+    else if(options === "mem") {
+      const searchPattern = new RegExp(searchValue,"i")
+      const result = memData?.filter(item => (item.email.search(searchPattern) >= 0))
+      return result
+    }
+  }
+
+  const searchResult = searchHandler()
 
   return (
     <>
-      {deleteModal && <DeleteMember close={displayDeleteModal}/>}
       {addDueModal && <AddDue close={displayAddDueModal}/>}
       <DuesContainer>
           <DuesHighlight>
@@ -67,8 +82,8 @@ const Dues = () => {
 
             <MembersSearch>
               <MembersSearchCompCon>
-                <MembersSearchInput placeholder='Search'/>
-                <MembersSearchBtn>
+                <MembersSearchInput placeholder={options === "all" ?  "Search by name":"Search by email" } value={searchValue} onChange={(e)=>setSearchValue(e.target.value)}/>
+                <MembersSearchBtn onClick={searchHandler}>
                   <SearchIcon style={{width:"15px",height:"15x"}}/>
                 </MembersSearchBtn>
               </MembersSearchCompCon>
@@ -78,11 +93,21 @@ const Dues = () => {
 
             <MembersPersonList>
                 {
+                  searchResult?.length <= 0 ? 
+
                   options === "all" ? 
-                  (allLoading || allFetching) ? <Loading loading={allLoading}/> : (!allIsError) ? <AllDuesDel deleteFn={displayDeleteModal}/> : <p>can't load all dues</p>
+                  (allLoading || allFetching) ? <Loading loading={allLoading}/> : (!allIsError) ? <AllDuesTable data={allData} show={viewMoreDuesInfo} deleteFn={displayViewMoreDuesInfo}/> : <p>can't load all dues</p>
                   :
-                  (memLoading || memFetching) ? <Loading loading={memLoading} /> : (!memIsError) ? <MemDuesDel deleteFn={displayDeleteModal}/> :
+                  (memLoading || memFetching) ? <Loading loading={memLoading} /> : (!memIsError) ? <MemDuesTable data={memData} show={viewMoreDuesInfo} deleteFn={displayViewMoreDuesInfo}/> :
                   <p>can't load member dues</p>
+
+                  :
+                  options === "all" ? 
+                  (allLoading || allFetching) ? <Loading loading={allLoading}/> : (!allIsError) ? <AllDuesTable data={searchResult} show={viewMoreDuesInfo} deleteFn={displayViewMoreDuesInfo}/> : <p>can't load all dues</p>
+                  :
+                  (memLoading || memFetching) ? <Loading loading={memLoading} /> : (!memIsError) ? <MemDuesTable data={searchResult} show={viewMoreDuesInfo} deleteFn={displayViewMoreDuesInfo}/> :
+                  <p>can't load member dues</p>
+
                 }
             </MembersPersonList>
 

@@ -104,7 +104,7 @@ const AddDue = ({close}) => {
         }
     })
 
-    const {isLoading:createLoading, error:createError, mutate} = useMutation((data)=>createDues(data), {
+    const {isLoading:createLoading, mutate} = useMutation((data)=>createDues(data), {
         onMutate: () => {
             toast.info("Due Creation in progress",{progressClassName:"toastProgress",icon:false})
         },
@@ -125,7 +125,6 @@ const AddDue = ({close}) => {
     const onSubmit = (duesData) => {
         mutate(duesData)
     };
-    
   return (
     <BackDrop>
     <style>
@@ -158,13 +157,27 @@ const AddDue = ({close}) => {
                 For Excos:
                 <FormSelection defaultValue={""} {...register("is_for_excos", {required:true})}>
                     <FormOption disabled value="">select an option</FormOption>
+                    <FormOption value={true}>Yes</FormOption>
+                    <FormOption value={false}>No</FormOption>
+                </FormSelection>
+            </FormLabel>
+
+            {
+                watch("is_for_excos")==="true" ? 
+            <FormLabel>
+                Select Exco:
+                <FormSelection defaultValue={""} {...register("exco", {required:true})}>
+                    <FormOption disabled value="">select an option</FormOption>
                     {
                         excoListData.map(item => (
                             <FormOption key={item.id} value={item.id}>{item.id} || {item.name}</FormOption>
-                        ))
+                            ))
                     }
                 </FormSelection>
             </FormLabel>
+                            :
+                            null
+                        }
             
             <FormLabel>
                 Alumni Year:
@@ -196,12 +209,12 @@ const AddDue = ({close}) => {
                 <FormSelection defaultValue={""} {...register("scheduletype", {required:true})}>
                     <FormOption disabled value="">select an option</FormOption>
                     <FormOption value="day_of_week">Day Of Week</FormOption>
-                    <FormOption value="day_of_month">Day of Month</FormOption>
+                    <FormOption value="month_of_year">Month of Year</FormOption>
                 </FormSelection>
             </FormLabel>
 
             {
-                watch("scheduletype") === "day_of_month" && <>
+                watch("scheduletype") === "month_of_year" && <>
                     <FormLabel>To select multiple months on desktop hold ctrl for windows or command button for Mac</FormLabel>
                     <FormLabel>
                         Select Months:

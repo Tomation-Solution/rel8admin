@@ -1,8 +1,10 @@
 import React from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
-import { CancelIcon, EditIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
+import { CancelIcon, EditIcon, EllipsesIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
 import { rel8LightPink, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
+import { AllDuesViewMore, MembersDuesViewMore } from './ViewMoreInfo'
 
 const Table = styled.table`
     width: 100%;
@@ -14,12 +16,15 @@ const TableRow = styled.tr`
 const TableHead = styled.th`
     text-align: center;
     padding-bottom: 20px;
+    border-right: 2px solid ${rel8LightPink};
 `
 const TableData = styled.td`
     padding: 10px;
+    font-size: 14px;
     background-color: ${rel8White};
     text-align: center;
     border-bottom: 2px solid ${rel8LightPink};
+    border-right: 2px solid ${rel8LightPink};
 
     ${
         mobile({
@@ -112,7 +117,7 @@ export const EditDeleteWriteOnly = ({deleteFn, editFn, writeFn}) => {
   )
 }
 
-export const MemberDelTable = ({deleteFn}) => {
+export const MemberDashTable = ({deleteFn}) => {
     return (
       <Table>
           <TableBody>
@@ -133,7 +138,7 @@ export const MemberDelTable = ({deleteFn}) => {
     )
   }
 
-  export const ExcoDelTable = ({deleteFn}) => {
+  export const ExcoDashTable = ({deleteFn}) => {
     return (
       <Table>
           <TableBody>
@@ -154,44 +159,72 @@ export const MemberDelTable = ({deleteFn}) => {
     )
   }
 
-  export const AllDuesDel = ({deleteFn}) => {
+  export const AllDuesTable = ({deleteFn , data, show}) => {
+    const [selected, setSelected] = useState(null)
     return (
-        <Table>
-            <TableBody>
-    
-                <TableRow>
-                    <TableHead>All</TableHead>
-                    <TableHead>Hello</TableHead>
-                </TableRow>
-                <TableRow>
-                    <TableData>Hello Content</TableData>
-                    <TableData>Hello Content</TableData>
-                    <TableData>
-                        <CancelIcon svgClick={deleteFn} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
-                    </TableData>
-                </TableRow>
-            </TableBody>
-        </Table>
+        <>
+
+        {show && <AllDuesViewMore data={selected} close={deleteFn}/>}
+
+            <Table>
+                <TableBody>
+        
+                    <TableRow>
+                        <TableHead>id</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Action</TableHead>
+                    </TableRow>
+                    {
+                        data.map(item => {
+                            return(
+                                <TableRow key={item.id}>
+                                    <TableData>{item.id}</TableData>
+                                    <TableData>{item.Name}</TableData>
+                                    <TableData>{Number(item.amount).toLocaleString("en-US")}</TableData>
+                                    <TableData>
+                                        <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
+                                    </TableData>
+                                </TableRow>
+                            )
+                        })
+                    }
+
+                </TableBody>
+            </Table>
+        </>
       )
   }
 
-  export const MemDuesDel = ({deleteFn}) => {
+  export const MemDuesTable = ({deleteFn, data, show}) => {
+    const [selected, setSelected] = useState(null)
     return (
-        <Table>
-            <TableBody>
-    
-                <TableRow>
-                    <TableHead>Mem Dues</TableHead>
-                    <TableHead>Hello</TableHead>
-                </TableRow>
-                <TableRow>
-                    <TableData>Hello Content</TableData>
-                    <TableData>Hello Content</TableData>
-                    <TableData>
-                        <CancelIcon svgClick={deleteFn} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
-                    </TableData>
-                </TableRow>
-            </TableBody>
-        </Table>
+        <>
+        {show && <MembersDuesViewMore data={selected} close={deleteFn}/>}
+        
+            <Table>
+                <TableBody>
+        
+                    <TableRow>
+                        <TableHead>Id</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Amount Owing</TableHead>
+                        <TableHead>Action</TableHead>
+                    </TableRow>
+                    {
+                        data.map(item => {
+                            return(<TableRow key={item.id}>
+                                        <TableData>{item.id}</TableData>
+                                        <TableData style={{overflowWrap: 'anywhere'}}>{item.email.toString()}</TableData>
+                                        <TableData>{Number(item.amount_owing).toLocaleString("en-US")}</TableData>
+                                        <TableData>
+                                            <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
+                                        </TableData>
+                                    </TableRow>)
+                        })
+                    }
+                </TableBody>
+            </Table>
+        </>
       )
   }

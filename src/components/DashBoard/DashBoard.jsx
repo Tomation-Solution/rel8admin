@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { DuesIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
-import { ExcoDelTable, MemberDelTable } from '../ActionComponents/ActionComponents1'
+import { ExcoDashTable, MemberDashTable } from '../ActionComponents/ActionComponents1'
 import { DashBoardContainer, DashBoardHeaders, DashBoardHeadersItem, DashBoardLeft,
    DashBoardMemberCon, DashBoardPersons, DashBoardRight, DashBoardRightCon,
     DashBoardRightDue, DashBoardRightDueButton,
@@ -50,7 +50,7 @@ const DashBoard = () => {
 
   
   // console.log(excoData)
-  console.log("ALL MEMBERS",memData)
+  // console.log("ALL MEMBERS",memData)
   return (
     <>
     
@@ -66,7 +66,6 @@ const DashBoard = () => {
             (!adminDashIsError) ? dashboardSummary.map((item, index) => <MemberDetBox key={index} data={{header: Object.values(item)[0], subheader: Object.keys(item)[0].replace(/_/g,' ').toUpperCase()}}/>) 
             : <small>can't fetch summary data</small>
           }
-          {/* <MemberDetBox cirColor={"red"} data={{header:"20,000", subheader:"Membership"}}/> */}
         </DashBoardMemberCon>
 
         <DashBoardPersons>
@@ -77,9 +76,9 @@ const DashBoard = () => {
 
           {
             options==="exco" ? 
-            (excoLoading || excoFetching) ? <Loading loading={excoLoading}/> : (!excoIsError) ? (<MemberDelTable deleteFn={displayModal}/>) : <small>cant fetch excos</small>
+            (excoLoading || excoFetching) ? <Loading loading={excoLoading || excoFetching}/> : (!excoIsError) ? (<ExcoDashTable deleteFn={displayModal}/>) : <small>cant fetch excos</small>
             : 
-            (memLoading || memFetching) ? <Loading loading={memLoading}/> : (!memIsError) ? <ExcoDelTable deleteFn={displayModal}/> : <small>cant fetch members</small>
+            (memLoading || memFetching) ? <Loading loading={memLoading || memFetching}/> : (!memIsError) ? <MemberDashTable deleteFn={displayModal}/> : <small>cant fetch members</small>
           }
 
         </DashBoardPersons>

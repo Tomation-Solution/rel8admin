@@ -55,6 +55,16 @@ export const createDues = async (dueData) => {
     }
 }
 
+//IS THIS THE SAME ONE I WILL USE TO DELETE MEMBERS OWING
+export const deleteDue = async (dueID) => {
+    try{
+        const res = await privateRequest.delete(`/tenant/dues/AdminManageDue/${dueID}/`)
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
 export const getMemberDues = async () => {
     try{
         const res = await privateRequest.get('/tenant/dues/AdminManageDue/owning_members/')
@@ -69,7 +79,7 @@ export const getMemberDues = async () => {
 //REMEMBER TO CHANGE THIS ENDPOINT TO THE GET ALL EXCOS ENDPOINT
 export const getAllExcos = async () => {
     try{
-        const res = await privateRequest.get('/tenant/user/ManageAssigningExos/')
+        const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_exco/')
         return res.data
     }catch(e){
         throw new AxiosError(e)

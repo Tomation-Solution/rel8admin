@@ -122,7 +122,7 @@ export const AddNewBtn = styled.button`
 `
 export const MembersPersonList = styled.div`
     width: 100%;
-    background-color: ${rel8White};
+    /* background-color: ${rel8White}; */
     border-radius: 10px;
     padding: 20px 0px;
 `
