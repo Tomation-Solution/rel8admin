@@ -27,6 +27,7 @@ const SubCon = styled.div`
 const SubConHeader = styled.p`
     font-weight: 700;
     text-align: center;
+    margin-top: ${props=>props.spaced === "spaced" ? "50px" : ""};
 `
 const SubConHeader2 = styled.p`
     margin-top: 20px;
@@ -194,6 +195,48 @@ export const MembersDuesViewMore = ({ data, close }) => {
                 <SubConBtnHold>
                     <SubConBtn typex="filled" onClick={()=>deleteDues(data.id)} disabled={isLoading}>Delete</SubConBtn>
                     <SubConBtn onClick={close} disabled={isLoading}>Close</SubConBtn>
+                </SubConBtnHold>
+            </SubCon>
+        </BackDrop>
+    )
+}
+
+export const MembersDashViewMore = ({ data, close }) => {
+    console.log(data)
+    return (
+        <BackDrop>
+            <style>
+                {`
+                    body{
+                        overflow:hidden;
+                    }
+                `}
+            </style>
+            <SubCon>
+                <SubConHeader>More Details</SubConHeader>
+                {data ? 
+                <>
+                    <PhotoHolderCon> <PhotoHolder alt='' src={data.photo}/> </PhotoHolderCon> 
+                    <SubConHeader2><TitleCon>Id: </TitleCon> {data.id}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>Email: </TitleCon> {data.email}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>Amount Owing: </TitleCon> {data.amount_owing}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>Is Exco: </TitleCon> {data.is_exco}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>Is Financial: </TitleCon> {data.is_financial}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>Alumni Year: </TitleCon> {data.alumni_year}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>User: </TitleCon> {data.user}</SubConHeader2>
+                    <SubConHeader spaced="spaced">MEMBER INFO</SubConHeader>{
+                        data?.member_info.map((item,index) => {
+                            return(
+                                <SubConHeader2 key={index}> <TitleCon>{item.name}: </TitleCon> {item.value}</SubConHeader2>
+                            )
+                        })
+                    }
+                </>
+                : 
+                <small>Can't fetch additional Due Info.</small>}
+                <SubConBtnHold>
+                    <SubConBtn typex="filled">Delete</SubConBtn>
+                    <SubConBtn onClick={close}>Close</SubConBtn>
                 </SubConBtnHold>
             </SubCon>
         </BackDrop>

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { CancelIcon, EditIcon, EllipsesIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
 import { rel8LightPink, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
-import { AllDuesViewMore, MembersDuesViewMore } from './ViewMoreInfo'
+import { AllDuesViewMore, MembersDashViewMore, MembersDuesViewMore } from './ViewMoreInfo'
 
 const Table = styled.table`
     width: 100%;
@@ -117,24 +117,35 @@ export const EditDeleteWriteOnly = ({deleteFn, editFn, writeFn}) => {
   )
 }
 
-export const MemberDashTable = ({deleteFn}) => {
+export const MemberDashTable = ({deleteFn, data, show}) => {
+    const [selected, setSelected] = useState(null)
     return (
-      <Table>
-          <TableBody>
-  
-              <TableRow>
-                  <TableHead>Excos</TableHead>
-                  <TableHead>Hello</TableHead>
-              </TableRow>
-              <TableRow>
-                  <TableData>Hello Content</TableData>
-                  <TableData>Hello Content</TableData>
-                  <TableData>
-                      <CancelIcon svgClick={deleteFn} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
-                  </TableData>
-              </TableRow>
-          </TableBody>
-      </Table>
+        <>
+        {show && <MembersDashViewMore data={selected} close={deleteFn}/>}
+            <Table>
+                <TableBody>
+        
+                    <TableRow>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Amount Owing</TableHead>
+                        <TableHead>Action</TableHead>
+                    </TableRow>
+                    {
+                        data.map(item => {
+                            return(
+                                <TableRow key={item.id}>
+                                    <TableData style={{overflowWrap: 'anywhere'}}>{item.email}</TableData>
+                                    <TableData>{Number(item.amount_owing).toLocaleString("en-US")}</TableData>
+                                    <TableData>
+                                        <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
+                                    </TableData>
+                                </TableRow>
+                            )
+                        })
+                    }
+                </TableBody>
+            </Table>
+        </>
     )
   }
 

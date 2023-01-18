@@ -30,9 +30,13 @@ const DashBoard = () => {
 
   const { isLoading:excoLoading, isFetching:excoFetching, data:excoData, isError:excoIsError } = useQuery('all-excos', getAllExcos,{
     refetchOnWindowFocus:false,
+    select: data => data.data
+
   })
   const { isLoading:memLoading, isFetching:memFetching, data:memData, isError:memIsError } = useQuery('all-members', getAllMembers, {
-    refetchOnWindowFocus:false 
+    refetchOnWindowFocus:false,
+    select: data => data.data.reverse()
+
   })
   const { isLoading:adminDashLoading, isFetching:adminDashFetching, data:adminDashData, isError:adminDashIsError } = useQuery("admin-dashboard-info", getAdminDashBoardDetails, {
     refetchOnWindowFocus: false,
@@ -54,7 +58,6 @@ const DashBoard = () => {
   return (
     <>
     
-    {showModal && <DeleteMember close={displayModal}/>}
     {addDueModal && <AddDue close={displayAddDueModal}/>}
     <DashBoardContainer>
       <DashBoardLeft>
@@ -78,7 +81,7 @@ const DashBoard = () => {
             options==="exco" ? 
             (excoLoading || excoFetching) ? <Loading loading={excoLoading || excoFetching}/> : (!excoIsError) ? (<ExcoDashTable deleteFn={displayModal}/>) : <small>cant fetch excos</small>
             : 
-            (memLoading || memFetching) ? <Loading loading={memLoading || memFetching}/> : (!memIsError) ? <MemberDashTable deleteFn={displayModal}/> : <small>cant fetch members</small>
+            (memLoading || memFetching) ? <Loading loading={memLoading || memFetching}/> : (!memIsError) ? <MemberDashTable data={memData} deleteFn={displayModal} show={showModal}/> : <small>cant fetch members</small>
           }
 
         </DashBoardPersons>
