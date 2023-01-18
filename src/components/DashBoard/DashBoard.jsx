@@ -10,7 +10,7 @@ import DeleteMember from './DeleteMember'
 import MemberDetBox from './MemberDetBox'
 import AddDue from '../Modals/AddDue'
 import { useQuery } from 'react-query'
-import { getAllExcos, getAllMembers } from '../../utils/api-calls'
+import { getAdminDashBoardDetails, getAllExcos, getAllMembers } from '../../utils/api-calls'
 import Loading from '../Loading/Loading'
 
 const DashBoard = () => {
@@ -34,9 +34,23 @@ const DashBoard = () => {
   const { isLoading:memLoading, isFetching:memFetching, data:memData, isError:memIsError } = useQuery('all-members', getAllMembers, {
     refetchOnWindowFocus:false 
   })
+  const { isLoading:adminDashLoading, isFetching:adminDashFetching, data:adminDashData, isError:adminDashIsError } = useQuery("admin-dashboard-info", getAdminDashBoardDetails, {
+    refetchOnWindowFocus: false,
+    select: data => data.data[0]
+  })
 
-  console.log(excoData)
-  console.log(memData)
+  const dashboardSummary = []
+
+  if(adminDashData){
+    for( let [key, value] of Object.entries(adminDashData) ){
+      let info = {[key]:value}
+      dashboardSummary.push(info)
+    }
+  }
+
+  
+  // console.log(excoData)
+  console.log("ALL MEMBERS",memData)
   return (
     <>
     
@@ -45,10 +59,14 @@ const DashBoard = () => {
     <DashBoardContainer>
       <DashBoardLeft>
         <DashBoardMemberCon>
-          <MemberDetBox cirColor={"red"} data={{header:"20,000", subheader:"Membership"}}/>
-          <MemberDetBox cirColor={"red"} data={{header:"20,000", subheader:"Membership"}}/>
-          <MemberDetBox data={{header:"20,000", subheader:"Membership"}}/>
-          <MemberDetBox data={{header:"20,000", subheader:"Membership"}}/>
+          {
+            (adminDashLoading || adminDashFetching) ?
+            <Loading loading={adminDashLoading || adminDashFetching}/>
+            :
+            (!adminDashIsError) ? dashboardSummary.map((item, index) => <MemberDetBox key={index} data={{header: Object.values(item)[0], subheader: Object.keys(item)[0].replace(/_/g,' ').toUpperCase()}}/>) 
+            : <small>can't fetch summary data</small>
+          }
+          {/* <MemberDetBox cirColor={"red"} data={{header:"20,000", subheader:"Membership"}}/> */}
         </DashBoardMemberCon>
 
         <DashBoardPersons>

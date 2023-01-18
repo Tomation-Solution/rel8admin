@@ -26,6 +26,16 @@ export const loginUser = async (user) => {
     // {email: 'dbadebayo@mail.com', password: 'buka2020backup@'}
 }
 
+//DASHBOARD
+export const getAdminDashBoardDetails = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/user/AdminRelatedViews/dashboard_info/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
 //DUES
 export const getAllDues = async () => {
     try{
@@ -45,9 +55,28 @@ export const createDues = async (dueData) => {
     }
 }
 
+export const getMemberDues = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/dues/AdminManageDue/owning_members/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
 
 //EXCOS
+
+//REMEMBER TO CHANGE THIS ENDPOINT TO THE GET ALL EXCOS ENDPOINT
 export const getAllExcos = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/user/ManageAssigningExos/')
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+export const getListOfExcos = async () => {
     try{
         const res = await privateRequest.get('/tenant/user/ManageAssigningExos/')
         return res.data
@@ -58,16 +87,6 @@ export const getAllExcos = async () => {
 
 //MEMBERS
 export const getAllMembers = async () => {
-    try{
-        const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_members/')
-        return res.data
-    }catch(e){
-        throw new AxiosError(e)
-    }
-}
-
-//NEEDS ENDPOINT
-export const getMemberDues = async () => {
     try{
         const res = await privateRequest.get('/tenant/user/memberlist-info/get_all_members/')
         return res.data

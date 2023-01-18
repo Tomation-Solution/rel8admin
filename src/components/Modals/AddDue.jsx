@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { useForm } from 'react-hook-form'
 import { mobile } from '../../responsive'
-import { createDues } from '../../utils/api-calls'
-import { useMutation } from 'react-query'
+import { createDues, getListOfExcos } from '../../utils/api-calls'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
+import Loading from '../Loading/Loading'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -80,9 +81,10 @@ const SubConBtn = styled.input`
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
     color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
     cursor: pointer;
+    background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
+    /* background-color: ${props=>props.loading==="loading" ? "#d3d3d3" : ""}; */
 `
 
 const AddDue = ({close}) => {
@@ -93,9 +95,23 @@ const AddDue = ({close}) => {
         }
     })
 
-    const {isLoading:createLoading, isFetching:createFetching, error:createError, mutate} = useMutation(()=>createDues(), {
+    const queryClient = useQueryClient()
+
+    const {isLoading:excoListLoading, isFetching:excoListFetching, isError:excoListIsError, data:excoListData} = useQuery("exco-list", getListOfExcos, {
+        refetchOnWindowFocus: false,
+        select: (data) => {
+            return data.data.map(item => ({id:item.id, name:item.name})).reverse()
+        }
+    })
+
+    const {isLoading:createLoading, error:createError, mutate} = useMutation((data)=>createDues(data), {
+        onMutate: () => {
+            toast.info("Due Creation in progress",{progressClassName:"toastProgress",icon:false})
+        },
         onSuccess: () => {
             toast.success("Due Created",{progressClassName:"toastProgress",icon:false})
+            queryClient.invalidateQueries("all-dues")
+            queryClient.invalidateQueries("member-dues")
             close()
         },
         onError: () => {
@@ -119,6 +135,8 @@ const AddDue = ({close}) => {
             }
         `}
     </style>
+    { (excoListLoading || excoListFetching) ? <Loading loading={excoListLoading || excoListFetching}/>: (!excoListIsError) ? 
+
     <SubCon>
         <SubConHeader>Add Due</SubConHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -140,8 +158,11 @@ const AddDue = ({close}) => {
                 For Excos:
                 <FormSelection defaultValue={""} {...register("is_for_excos", {required:true})}>
                     <FormOption disabled value="">select an option</FormOption>
-                    <FormOption value={true}>Yes</FormOption>
-                    <FormOption value={false}>No</FormOption>
+                    {
+                        excoListData.map(item => (
+                            <FormOption key={item.id} value={item.id}>{item.id} || {item.name}</FormOption>
+                        ))
+                    }
                 </FormSelection>
             </FormLabel>
             
@@ -223,11 +244,14 @@ const AddDue = ({close}) => {
             }
             
             <SubConBtnHold>
-                <SubConBtn type={"submit"} value="Add" typex="filled"/>
-                <SubConBtn type={"submit"} value="Cancel" onClick={close}/>
+                <SubConBtn type={"submit"} disabled={createLoading} loading={createLoading ? "loading":"" } value="Add" typex="filled"/>
+                <SubConBtn type={"submit"} disabled={createLoading} loading={createLoading ? "loading":"" } value="Cancel" onClick={close}/>
             </SubConBtnHold>
         </Form>
     </SubCon>
+
+    : <small style={{color:"white", fontSize:"20px"}}>can't add dues</small>
+    }
 </BackDrop>
   )
 }

@@ -46,7 +46,7 @@ const Dues = () => {
   })
 
   console.log(allData)
-  console.log(memData)
+  console.log("memData",memData)
 
   return (
     <>
