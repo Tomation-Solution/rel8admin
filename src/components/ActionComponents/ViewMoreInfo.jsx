@@ -147,25 +147,6 @@ export const AllDuesViewMore = ({ data, close }) => {
 }
 
 export const MembersDuesViewMore = ({ data, close }) => {
-    const queryClient = useQueryClient()
-
-    const { isLoading, mutate} = useMutation((dueId)=>deleteDue(dueId), {
-        onMutate: () => {
-            toast.info("Member Due Deletion in progress",{progressClassName:"toastProgress",icon:false})
-        },
-        onSuccess: () => {
-            toast.success("Member Due Deleted Successfully", {progressClassName:"toastProgress",icon:false})
-            queryClient.invalidateQueries("all-dues")
-            close()
-        },
-        onError: () => {
-            toast.error("Can't Delete Member Due")
-        }
-    })
-
-    const deleteDues = (id) => {
-        mutate(id)
-    }
     return(
 
             <BackDrop>
@@ -183,7 +164,7 @@ export const MembersDuesViewMore = ({ data, close }) => {
                     <PhotoHolderCon> <PhotoHolder alt='' src={data.photo}/> </PhotoHolderCon> 
                     <SubConHeader2><TitleCon>Id: </TitleCon> {data.id}</SubConHeader2>
                     <SubConHeader2> <TitleCon>Email: </TitleCon> {data.email}</SubConHeader2>
-                    <SubConHeader2> <TitleCon>Amount Owing: </TitleCon> {data.amount_owing}</SubConHeader2>
+                    <SubConHeader2> <TitleCon>Amount Owing: </TitleCon> {Number(data.amount_owing).toLocaleString("en-US")}</SubConHeader2>
                     <SubConHeader2> <TitleCon>Is Exco: </TitleCon> {data.is_exco}</SubConHeader2>
                     <SubConHeader2> <TitleCon>Is Financial: </TitleCon> {data.is_financial}</SubConHeader2>
                     <SubConHeader2> <TitleCon>Alumni Year: </TitleCon> {data.alumni_year}</SubConHeader2>
@@ -193,8 +174,7 @@ export const MembersDuesViewMore = ({ data, close }) => {
                 : 
                 <small>Can't fetch additional Due Info.</small>}
                 <SubConBtnHold>
-                    <SubConBtn typex="filled" onClick={()=>deleteDues(data.id)} disabled={isLoading}>Delete</SubConBtn>
-                    <SubConBtn onClick={close} disabled={isLoading}>Close</SubConBtn>
+                    <SubConBtn onClick={close}>Close</SubConBtn>
                 </SubConBtnHold>
             </SubCon>
         </BackDrop>

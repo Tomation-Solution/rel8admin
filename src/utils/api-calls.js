@@ -104,3 +104,13 @@ export const getAllMembers = async () => {
         throw new AxiosError(e)
     }
 }
+
+//SETTINGS
+export const UploadDataBase = async (file) => {
+    try{
+        const res = await privateRequest.post('/tenant/auth/upload_database/',file)
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}

@@ -3,14 +3,36 @@ import { SettingsContainer, SettingsHeader, SettingsSubHeader,
      SettingsUpload, SettingsUploadCon, SettingsUploadImg,
       SettingsUploadInput, SettingsUploadLabel } from './Settings.styles'
 import UploadImage from '../../assets/UploadImage.png'
-import { useState } from 'react'
+import { useMutation } from 'react-query'
+import { UploadDataBase } from '../../utils/api-calls'
+import { toast } from 'react-toastify'
 
 const Settings = () => {
     useEffect(()=>{
         window.scrollTo(0,0)
     },[])
-    const [upload, setUpload] = useState(null)
-    console.log(upload)
+
+    // Object.keys(upload)?.forEach(key => formData.append(key, upload[key]));
+    // console.log(formData);
+
+    const {isLoading, mutate} = useMutation((file)=>UploadDataBase(file), {
+        onMutate: () => {
+            toast.info("Database uploading...",{progressClassName:"toastProgress",icon:false})
+        },
+        onSuccess: () => {
+            toast.success("Database upload successful", {progressClassName:"toastProgress",icon:false})
+        },
+        onError: () => {
+            toast.error("Database upload unsuccessful",{progressClassName:"toastProgress",icon:false})
+        }
+    })
+
+
+    const uploadFile = (e) => {
+        const formData = new FormData()
+        formData.append('file', e.target.files[0])
+        mutate(formData)
+    }
 
   return (
     <SettingsContainer>
@@ -18,14 +40,16 @@ const Settings = () => {
             Upload Database
         </SettingsHeader>
         <SettingsSubHeader>Upload First Level Database</SettingsSubHeader>
+
         <SettingsUploadCon>
             <SettingsUpload>
                 <SettingsUploadLabel htmlFor='uploadImg'>
                     <SettingsUploadImg alt='' src={UploadImage}/>
                 </SettingsUploadLabel>
-                <SettingsUploadInput id='uploadImg' type={"file"} onChange={(e)=>setUpload(e.target.files[0])}/>
+                <SettingsUploadInput disabled={isLoading} id='uploadImg' type={"file"} onChange={(e)=>uploadFile(e)}/>
             </SettingsUpload>
         </SettingsUploadCon>
+
     </SettingsContainer>
   )
 }
