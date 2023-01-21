@@ -1,8 +1,12 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
+import { createNews, getListOfExcos } from '../../utils/api-calls'
+import Loading from '../Loading/Loading'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -21,7 +25,7 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
 `
-const FormData = styled.input`
+const FormDataComp = styled.input`
     padding: 5px 0px;
     background-color: transparent;
     border: none;
@@ -93,12 +97,74 @@ const SubConBtn = styled.input`
     background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
     color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
     cursor: pointer;
+
+    &:disabled{
+        background-color: "#d3d3d3";
+    }
+`
+const DeleteButton = styled.button`
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
+    color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
+    cursor: pointer;
+    margin-top: ${props=>props.mt==="filledup" ? "20px" : ""};
 `
 
 const AddNews = ({close}) => {
-  const {register, handleSubmit} = useForm()
+  const {register, handleSubmit, control, watch} = useForm({
+    defaultValues: {
+        news_paragraph: [
+            { heading: "",paragraph: ""}
+        ]
+    }
+  })
+  const { fields, append, remove } = useFieldArray({
+    name: "news_paragraph",
+    control
+  })
 
-  const onSubmit = data => console.log(data);
+    const {isLoading:excoListLoading, isFetching:excoListFetching, isError:excoListIsError, data:excoListData} = useQuery("exco-list", getListOfExcos, {
+        refetchOnWindowFocus: false,
+        select: (data) => {
+            return data.data.map(item => ({id:item.id, name:item.name})).reverse()
+        }
+    })
+
+    const queryClient = useQueryClient()
+
+
+  const { isLoading:createLoading, mutate:createMutate } = useMutation((newsData)=>createNews(newsData), {
+    onMutate: () => {
+        toast.info("News Creation in progress",{progressClassName:"toastProgress",icon:false})
+    },
+    onSuccess: () => {
+        toast.success("News Created",{progressClassName:"toastProgress",icon:false})
+        queryClient.invalidateQueries("all-news")
+        close()
+    },
+    onError: (error) => {
+        toast.error("Could not create news")
+        if(error?.message?.response?.data?.message?.error){
+            toast.error(`Message: ${error.message.response.data.message.error}`, {autoClose: 9000})
+        }
+    }
+  })
+
+
+
+  const onSubmit = (data) => {
+    const image = data.image[0]
+    const { news_paragraph,image:img, ...newdata } = data
+    const payload = {image,...newdata}
+    console.log(news_paragraph)
+    const formData = new FormData()
+    Object.keys(payload)?.forEach(key => formData.append(key, payload[key]))
+    formData.append('news_paragraph', JSON.stringify(news_paragraph))
+    console.log([formData.get("news_paragraph")]);
+    createMutate(formData)
+  }
   return (
     <BackDrop>
     <style>
@@ -108,53 +174,116 @@ const AddNews = ({close}) => {
             }
         `}
     </style>
-    <SubCon>
-        <SubConHeader>Add News</SubConHeader>
-        <Form onSubmit={handleSubmit(onSubmit)}>
 
-            <FormLabel>
-                Name:
-                <FormData type={"text"} {...register("name", {required:true})}/>
-            </FormLabel>
-            <FormLabel>
-                Image:
-                <FormData type={"file"} accept={"image/*"} {...register("image", {required:true})}/>
-            </FormLabel>
-            <FormLabel>
-                Paragraph:
-                <FormTextArea {...register("body", {required:true})}/>
-            </FormLabel>
-            <FormLabel>
-                Is Exco:
-                <FormSelection defaultValue={""} {...register("is_exco", {required:true})}>
-                    <FormOption disabled value="">select an option</FormOption>
-                    <FormOption value={true}>Yes</FormOption>
-                    <FormOption value={false}>No</FormOption>
-                </FormSelection>
-            </FormLabel>
-            <FormLabel>
-                Is Committe:
-                <FormSelection defaultValue={""} {...register("is_committe", {required:true})}>
-                    <FormOption disabled value="">select an option</FormOption>
-                    <FormOption value={true}>Yes</FormOption>
-                    <FormOption value={false}>No</FormOption>
-                </FormSelection>
-            </FormLabel>
-            <FormLabel>
-                Is Member:
-                <FormSelection defaultValue={""} {...register("is_member", {required:true})}>
-                    <FormOption disabled value="">select an option</FormOption>
-                    <FormOption value={true}>Yes</FormOption>
-                    <FormOption value={false}>No</FormOption>
-                </FormSelection>
-            </FormLabel>
-            
-            <SubConBtnHold>
-                <SubConBtn type={"submit"} value="Add" typex="filled"/>
-                <SubConBtn type={"submit"} value="Cancel" onClick={close}/>
-            </SubConBtnHold>
-        </Form>
-    </SubCon>
+    { (excoListLoading || excoListFetching) ? <Loading loading={excoListLoading || excoListFetching}/>: (!excoListIsError) ?
+
+        <SubCon>
+            <SubConHeader>Add News</SubConHeader>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+
+                <FormLabel>
+                    Name:
+                    <FormDataComp type={"text"} {...register("name", {required:true})}/>
+                </FormLabel>
+
+                <FormLabel>
+                    Image:
+                    <FormDataComp type={"file"} accept={"image/*"} {...register("image", {required:true})}/>
+                </FormLabel>
+
+                <FormLabel>
+                    Is Exco:
+                    <FormSelection defaultValue={""} {...register("is_exco", {required:true})}>
+                        <FormOption disabled value="">select an option</FormOption>
+                        <FormOption value={true}>Yes</FormOption>
+                        <FormOption value={false}>No</FormOption>
+                    </FormSelection>
+                </FormLabel>
+
+                {
+                    watch("is_exco") === "true" &&
+                    <FormLabel>
+                        Excos Id:
+                        <FormSelection defaultValue={""} {...register("exco_id", {required:true})}>
+                            <FormOption disabled value="">select an option</FormOption>
+                            {
+                                excoListData.map(item => (
+                                    <FormOption key={item.id} value={item.id}>{item.id} || {item.name}</FormOption>
+                                    ))
+                            }
+                        </FormSelection>
+                    </FormLabel>
+                }
+
+                <FormLabel>
+                    Is Committe:
+                    <FormSelection defaultValue={""} {...register("is_committe", {required:true})}>
+                        <FormOption disabled value="">select an option</FormOption>
+                        <FormOption value={true}>Yes</FormOption>
+                        <FormOption value={false}>No</FormOption>
+                    </FormSelection>
+                </FormLabel>
+                
+                {/* {
+                    //COMMITTE NAME NEEDED
+                    watch("is_committe")==="true" &&
+                    <FormLabel>
+                        Committe Name:
+                        <FormSelection defaultValue={""} {...register("commitee_name", {required:true})}>
+                            <FormOption disabled value="">select an option</FormOption>
+                            <FormOption value={"James"}>Yes</FormOption>
+                            <FormOption value={"James"}>No</FormOption>
+                        </FormSelection>
+                    </FormLabel>
+                } */}
+
+                <FormLabel>
+                    Is Member:
+                    <FormSelection defaultValue={""} {...register("is_member", {required:true})}>
+                        <FormOption disabled value="">select an option</FormOption>
+                        <FormOption value={true}>Yes</FormOption>
+                        <FormOption value={false}>No</FormOption>
+                    </FormSelection>
+                </FormLabel>
+
+                <FormLabel>
+                    Body:
+                    <FormTextArea {...register("body", {required:true})}/>
+                </FormLabel>
+
+                {
+                    fields.map((field, index) => {
+                        return (
+                            <section key={field.id}>
+                                <FormLabel>
+                                    Heading:
+                                    <FormDataComp type={"text"} {...register(`news_paragraph.${index}.heading`)}/>
+                                </FormLabel>
+
+                                <FormLabel>
+                                    Paragraph:
+                                    <FormTextArea {...register(`news_paragraph.${index}.paragraph`)}/>
+                                </FormLabel>
+                                <DeleteButton typex="filled" type='button' onClick={() => remove(index)}>Delete</DeleteButton>
+                            </section>
+                        )
+                    })
+                }
+                <DeleteButton type='button' mt="filledup" onClick={() => append({
+                        heading: "New Heading",
+                        paragraph: "New Paragraph"
+                    })
+                }>Add New Paragraph Section</DeleteButton>
+                
+                <SubConBtnHold>
+                    <SubConBtn type={"submit"} value="Add" disabled={createLoading} typex="filled"/>
+                    <SubConBtn type={"button"} value="Cancel" disabled={createLoading} onClick={close}/>
+                </SubConBtnHold>
+            </Form>
+        </SubCon>
+    
+        : <small style={{color:"white", fontSize:"20px"}}>can't add dues</small>
+    }
 </BackDrop>
   )
 }

@@ -6,7 +6,6 @@ import { DashBoardContainer, DashBoardHeaders, DashBoardHeadersItem, DashBoardLe
    DashBoardMemberCon, DashBoardPersons, DashBoardRight, DashBoardRightCon,
     DashBoardRightDue, DashBoardRightDueButton,
      DashBoardRightDueHeader, DashBoardRightDueSubHeader } from './DashBoard.styles'
-import DeleteMember from './DeleteMember'
 import MemberDetBox from './MemberDetBox'
 import AddDue from '../Modals/AddDue'
 import { useQuery } from 'react-query'

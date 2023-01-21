@@ -114,3 +114,90 @@ export const UploadDataBase = async (file) => {
         throw new AxiosError(e)
     }
 }
+
+//EVENTS
+export const getAllEvents = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/event/eventview/') 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const deleteEvents = async (id) => {
+    try{
+        const res = await privateRequest.delete(`/tenant/event/eventview/${id}/`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const createEvents = async (data) => {
+    try{
+        const res = await privateRequest.post('/tenant/event/eventview/',data) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const updateEvent = async (data) => {
+    try{
+        const res = await privateRequest.post('/tenant/event/eventview/activate_event/',data) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+
+//NEWS
+export const createNews = async (payload) => {
+    try{
+        const res = await privateRequest.post('/tenant/news/newsview/',payload) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const deleteNews = async (id) => {
+    try{
+        const res = await privateRequest.delete(`/tenant/news/newsview/${id}/`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const getAllNews = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/news/newsview/') 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+//PUBLICATIONS
+export const createPublication = async (payload) => {
+    try{
+        const res = await privateRequest.post('/tenant/publication/publicationview/',payload) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const deletePublication = async (id) => {
+    try{
+        const res = await privateRequest.delete(`/tenant/publication/publicationview/${id}`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const getAllPublications = async () => {
+    try{
+        const res = await privateRequest.get('/tenant/publication/publicationview/') 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}

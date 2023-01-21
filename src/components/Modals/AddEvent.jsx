@@ -1,8 +1,12 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
+import { createEvents, getListOfExcos } from '../../utils/api-calls'
+import Loading from '../Loading/Loading'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -21,7 +25,7 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
 `
-const FormData = styled.input`
+const FormDataComp = styled.input`
     padding: 5px 0px;
     background-color: transparent;
     border: none;
@@ -82,9 +86,47 @@ const SubConBtn = styled.input`
     cursor: pointer;
 `
 
+
+
 const AddEvent = ({close}) => {
-    const {register, handleSubmit} = useForm()
-    const onSubmit = data => console.log(data);
+    const {register, handleSubmit, watch} = useForm({
+        defaultValues: {
+            scheduletype:"",
+            schedule:[]
+        }
+    })
+
+    const {isLoading:excoListLoading, isFetching:excoListFetching, isError:excoListIsError, data:excoListData} = useQuery("exco-list", getListOfExcos, {
+        refetchOnWindowFocus: false,
+        select: (data) => {
+            return data.data.map(item => ({id:item.id, name:item.name})).reverse()
+        }
+    })
+
+    const queryClient = useQueryClient()
+
+    const { mutate, isLoading } = useMutation((data)=>createEvents(data), {
+        onMutate: () => {
+            toast.info("Event Creation in progress",{progressClassName:"toastProgress",icon:false})
+        },
+        onSuccess: () => {
+            toast.success("Event Created",{progressClassName:"toastProgress",icon:false})
+            queryClient.invalidateQueries("all-events")
+            close()
+        },
+        onError: () => {
+            toast.error("Could not create event")
+        }
+    })
+
+    const onSubmit = (data) => {
+        const image = data.image[0]
+        const { image:img, ...newdata } = data
+        const payload = {image,...newdata}
+        const formData = new FormData()
+        Object.keys(payload)?.forEach(key => formData.append(key, payload[key]));
+        mutate(formData)
+    }
   return (
     <BackDrop>
         <style>
@@ -94,21 +136,20 @@ const AddEvent = ({close}) => {
                 }
             `}
         </style>
+
+        { (excoListLoading || excoListFetching) ? <Loading loading={excoListLoading || excoListFetching}/>: (!excoListIsError) ? 
+
         <SubCon>
             <SubConHeader>Add Event</SubConHeader>
             <Form onSubmit={handleSubmit(onSubmit)}>
-            {/* {
-    "is_paid_event":false,
-    "re_occuring":false,
 
-} */}
                 <FormLabel>
                     Name:
-                    <FormData type={"text"} {...register("name", {required:true})}/>
+                    <FormDataComp type={"text"} {...register("name", {required:true})}/>
                 </FormLabel>
                 <FormLabel>
                     Amount:
-                    <FormData type={"number"} min={0} {...register("amount", {required:true,min:{
+                    <FormDataComp type={"number"} min={0} {...register("amount", {required:true,min:{
                         value: 0,
                         message: "invalid amount"
                     }})}/>
@@ -116,10 +157,13 @@ const AddEvent = ({close}) => {
                 
                 <FormLabel>
                     For Excos:
-                    <FormSelection defaultValue={""} {...register("is_for_excos", {required:true})}>
+                    <FormSelection defaultValue={""} {...register("exco_id", {required:true})}>
                         <FormOption disabled value="">select an option</FormOption>
-                        <FormOption value={true}>Yes</FormOption>
-                        <FormOption value={false}>No</FormOption>
+                        {
+                            excoListData.map(item => (
+                                <FormOption key={item.id} value={item.id}>{item.id} || {item.name}</FormOption>
+                                ))
+                        }
                     </FormSelection>
                 </FormLabel>
                
@@ -161,24 +205,84 @@ const AddEvent = ({close}) => {
 
                 <FormLabel>
                     Address:
-                    <FormData type={"text"} {...register("address", {required:true})}/>
+                    <FormDataComp type={"text"} {...register("address", {required:true})}/>
                 </FormLabel>
 
                 <FormLabel>
                     Start Date:
-                    <FormData type={"date"} {...register("startDate", {required:true})}/>
+                    <FormDataComp type={"date"} {...register("startDate", {required:true})}/>
                 </FormLabel>
                 <FormLabel>
                     Start Time:
-                    <FormData type={"time"} {...register("startTime", {required:true})}/>
+                    <FormDataComp type={"time"} {...register("startTime", {required:true})}/>
                 </FormLabel>
 
+                <FormLabel>
+                    Image:
+                    <FormDataComp type={"file"} accept="image/*" {...register("image", {required:true})}/>
+                </FormLabel>
+
+                <FormLabel>
+                Schedule Type:
+                <FormSelection defaultValue={""} {...register("scheduletype", {required:true})}>
+                    <FormOption disabled value="">select an option</FormOption>
+                    <FormOption value="day_of_week">Day Of Week</FormOption>
+                    <FormOption value="month_of_year">Month of Year</FormOption>
+                </FormSelection>
+            </FormLabel>
+
+            {
+                watch("scheduletype") === "month_of_year" && <>
+                    <FormLabel>To select multiple months on desktop hold ctrl for windows or command button for Mac</FormLabel>
+                    <FormLabel>
+                        Select Months:
+                    </FormLabel>
+                    <FormSelection defaultValue={[]} multiple {...register("schedule")}>
+                        <FormOption disabled value={""}>Select Options</FormOption>
+                        <FormOption value="0">January</FormOption>
+                        <FormOption value="1">February</FormOption>
+                        <FormOption value="2">March</FormOption>
+                        <FormOption value="3">April</FormOption>
+                        <FormOption value="4">May</FormOption>
+                        <FormOption value="5">June</FormOption>
+                        <FormOption value="6">July</FormOption>
+                        <FormOption value="7">August</FormOption>
+                        <FormOption value="8">September</FormOption>
+                        <FormOption value="9">October</FormOption>
+                        <FormOption value="10">November</FormOption>
+                        <FormOption value="11">December</FormOption>
+                    </FormSelection>
+                </>
+            }
+            
+            {
+                watch("scheduletype") === "day_of_week" && <>
+                    <FormLabel>To select multiple days on desktop hold ctrl for windows or command button for Mac</FormLabel>
+                    <FormLabel>
+                        Select Week days:
+                    </FormLabel>
+                    <FormSelection defaultValue={[]} multiple {...register("schedule")}>
+                        <FormOption disabled value={""}>Select Options</FormOption>
+                        <FormOption value="0">Sunday</FormOption>
+                        <FormOption value="1">Monday</FormOption>
+                        <FormOption value="2">Tuesday</FormOption>
+                        <FormOption value="3">Wednesday</FormOption>
+                        <FormOption value="4">Thursday</FormOption>
+                        <FormOption value="5">Friday</FormOption>
+                        <FormOption value="6">Saturday</FormOption>
+                    </FormSelection>
+                </>
+            }
+
                 <SubConBtnHold>
-                    <SubConBtn type={"submit"} value="Add" typex="filled"/>
-                    <SubConBtn type={"submit"} value="Cancel" onClick={close}/>
+                    <SubConBtn type={"submit"} value="Add" typex="filled" disabled={isLoading} />
+                    <SubConBtn type={"submit"} value="Cancel" onClick={close} disabled={isLoading}/>
                 </SubConBtnHold>
             </Form>
         </SubCon>
+
+        : <small style={{color:"white", fontSize:"20px"}}>can't add dues</small>
+        }
     </BackDrop>
   )
 }
