@@ -201,3 +201,73 @@ export const getAllPublications = async () => {
         throw new AxiosError(e)
     }
 }
+
+//GALLERY
+export const getAllGalleries = async () => {
+    try{
+        const res = await privateRequest.get("/tenant/extras/admin_gallery_version2/") 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const createGallery = async (data) => {
+    try{
+        const res = await privateRequest.post("/tenant/extras/admin_gallery_version2/",data) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const deleteGallery = async (id) => {
+    try{
+        const res = await privateRequest.delete(`/tenant/extras/admin_gallery_version2/${id}/`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const getSingleGallery = async (id) => {
+    try{
+        const res = await privateRequest.get(`/tenant/extras/admin_gallery_version2/${id}/`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+
+
+//COMMITTEE
+export const getAllCommittee = async () => {
+    try{
+        const res = await privateRequest.get("/tenant/auth/manage-commitee-member/")
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const createCommittee = async (data) => {
+    try{
+        const res = await privateRequest.post("/tenant/auth/manage-commitee-member/", data)
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const updateCommittee = async (payload) => {
+    try{
+        const [id, formData] = payload
+        const res = await privateRequest.patch(`/tenant/auth/manage-commitee-member/${id}/`, formData)
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+export const addMoreMembtoCommittee = async (data) => {
+    try{
+        const res = await privateRequest.post("/tenant/auth/manage-commitee-member/add_members/",data)
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}

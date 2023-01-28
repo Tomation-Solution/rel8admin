@@ -137,7 +137,7 @@ const AddDue = ({close}) => {
     { (excoListLoading || excoListFetching) ? <Loading loading={excoListLoading || excoListFetching}/>: (!excoListIsError) ? 
 
     <SubCon>
-        <SubConHeader>Add Due</SubConHeader>
+        <SubConHeader>Add Payment</SubConHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
             <FormLabel>
                 Name:

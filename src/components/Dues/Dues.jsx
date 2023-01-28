@@ -11,7 +11,6 @@ import Loading from '../Loading/Loading'
 import { useQuery } from 'react-query'
 import { getAllDues, getMemberDues } from '../../utils/api-calls'
 import { toast } from 'react-toastify'
-import { AllDuesViewMore } from '../ActionComponents/ViewMoreInfo'
 
 const Dues = () => {
     useEffect(()=>{

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { CancelIcon, EditIcon, EllipsesIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
 import { rel8LightPink, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
-import { AllDuesViewMore, EventsViewMore, MembersDashViewMore, MembersDuesViewMore, NewsViewMore, PublicationViewMore } from './ViewMoreInfo'
+import { AllDuesViewMore, CommitteeViewMore, EventsViewMore, MembersDashViewMore, MembersDuesViewMore, NewsViewMore, PublicationViewMore } from './ViewMoreInfo'
 
 const Table = styled.table`
     width: 100%;
@@ -333,6 +333,41 @@ export const PublicationTable = ({show, data, deleteFn}) => {
                                         <TableData>{item.name}</TableData>
                                         <TableData>
                                             <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
+                                        </TableData>
+                                    </TableRow>)
+                        })
+                    }
+                </TableBody>
+            </Table>
+        </>
+    )
+}
+
+
+//COMMITTEE
+export const  CommitteeTable = ({show, data, deleteFn}) => {
+    const [selected, setSelected] = useState(null)
+
+    return(
+        <>
+         {show && <CommitteeViewMore data={selected} close={deleteFn}/>}
+            <Table>
+                <TableBody>
+        
+                    <TableRow>
+                        <TableHead>Id</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Action</TableHead>
+                    </TableRow>
+                    {
+                        data.map(item => {
+                            return(<TableRow key={item.id}>
+                                        <TableData>{item.id}</TableData>
+                                        <TableData>{item.name}</TableData>
+                                        <TableData>
+                                            <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
+                                            {/* <PlusCircleIcon style={{cursor:"pointer",width:"25px",height:"25px"}}/> */}
+
                                         </TableData>
                                     </TableRow>)
                         })

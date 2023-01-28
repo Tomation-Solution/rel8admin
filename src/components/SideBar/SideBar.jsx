@@ -1,5 +1,5 @@
 import React from 'react'
-import { DashBoardIcon, DuesIcon, ElectionIcon, EventsIcon, GalleryIcon, LogoOutIcon, NewsIcon,
+import { CommitteeIcon, DashBoardIcon, DuesIcon, ElectionIcon, EventsIcon, GalleryIcon, LogoOutIcon, NewsIcon,
      NotificationIcon, PublicIcon, SettingsIcon, UsersIcon } from '../../assets/SideBar/svgs'
 import { CloseSlider, Hamburger, LogOutBtn, SideBarContainer, SideBarContainer2,
      SideBarItem, SideBarItemCon, SideBarLogo, SideBarLogoCon,
@@ -88,9 +88,9 @@ const SideBar = () => {
                     </CustNavLink>
                 </SideBarItem>
                 <SideBarItem>
-                    <CustNavLink where={"/dues"}>
+                    <CustNavLink where={"/payments"}>
                         <DuesIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
-                        Dues
+                        Payments
                     </CustNavLink>
                 </SideBarItem>
                 <SideBarItem>
@@ -107,8 +107,14 @@ const SideBar = () => {
                 </SideBarItem>
                 <SideBarItem>
                     <CustNavLink where={"/committee"}>
-                        <ElectionIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
+                        <CommitteeIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
                         Committee
+                    </CustNavLink>
+                </SideBarItem>
+                <SideBarItem>
+                    <CustNavLink where={"/meetings"}>
+                        <UsersIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
+                        Meetings
                     </CustNavLink>
                 </SideBarItem>
                 <SideBarItem>
@@ -161,9 +167,9 @@ const SideBar = () => {
                     </CustNavLink>
                 </SideBarItem>
                 <SideBarItem>
-                    <CustNavLink where={"/dues"}>
+                    <CustNavLink where={"/payments"}>
                         <DuesIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
-                        Dues
+                        Payments
                     </CustNavLink>
                 </SideBarItem>
                 <SideBarItem>
@@ -180,8 +186,14 @@ const SideBar = () => {
                 </SideBarItem>
                 <SideBarItem>
                     <CustNavLink where={"/committee"}>
-                        <ElectionIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
+                        <CommitteeIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
                         Committee
+                    </CustNavLink>
+                </SideBarItem>
+                <SideBarItem>
+                    <CustNavLink where={"/meetings"}>
+                        <UsersIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
+                        Meetings
                     </CustNavLink>
                 </SideBarItem>
                 <SideBarItem>

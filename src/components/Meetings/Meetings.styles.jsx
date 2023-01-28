@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { rel8Pink, rel8Purple, rel8White } from "../../globals";
 import { mobile, tablet } from "../../responsive";
 
-export const CommitteeContainer = styled.div`
+export const MeetingsContainer = styled.div`
     margin-top: 67px;
     margin-left: 220px;
     padding: 50px 30px;
@@ -20,16 +20,4 @@ export const CommitteeContainer = styled.div`
             marginLeft: "0px",
         })
     }
-`
-
-export const CommitteeHeader = styled.p`
-    font-size: 20px;
-    color: ${rel8Purple};
-`
-
-export const CommitteeList = styled.div`
-    width: 100%;
-    background-color: ${rel8White};
-    border-radius: 10px;
-    padding: 20px 0px;
 `

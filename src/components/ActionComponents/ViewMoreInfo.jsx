@@ -1,10 +1,14 @@
 import React from 'react'
-import { useMutation, useQueryClient } from 'react-query'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
-import { deleteDue, deleteEvents, deleteNews, deletePublication, updateEvent } from '../../utils/api-calls'
+import { addMoreMembtoCommittee, deleteDue, deleteEvents, deleteNews, deletePublication, getAllMembers, updateCommittee, updateEvent } from '../../utils/api-calls'
+import Loading from '../Loading/Loading'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -77,6 +81,98 @@ const ParagraphHeading = styled.p`
     margin-top: 20px;
     text-decoration: underline;
     text-align: center;
+`
+const OptionHolder = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid ${rel8Purple};
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+
+    ${
+        mobile({
+            flexDirection: "column"
+        })
+    }
+`
+const OptionItems = styled.span`
+    font-size: 14px;
+    color: ${rel8Purple};
+    font-weight: ${props=>props.selected==="select" ?  700 : 400};
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+`
+const CommitteeDetails = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`
+const CommitteeList = styled.div`
+    text-align: center;
+    margin: 10px 0px;
+`
+const CommitteeListItem = styled.p`
+    margin: 5px 0px;
+`
+const CommitteeListSpan = styled.span`
+    margin-right: 5px;
+`
+const Form = styled.form`
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+`
+const FormDataComp = styled.input`
+    padding: 5px 0px;
+    background-color: transparent;
+    border: none;
+    border: 1px solid ${rel8Purple};
+    border-radius: 5px;
+    padding: 5px;
+    color: ${rel8Purple};
+    outline: none;
+    &::placeholder{
+        color: ${rel8Purple};
+    }
+`
+const FormSelection = styled.select`
+    padding: 5px 0px;
+    color: ${rel8Purple};
+    outline: none;
+    border: none;
+    border-bottom: 1px solid ${rel8Purple};
+    margin: 10px 0px;
+    overflow: auto;
+`
+const FormOption = styled.option``
+const FormLabel =  styled.label`
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    margin: 10px 0px;
+`
+const SubConBtnInput = styled.input`
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
+    color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
+    cursor: pointer;
+`
+const CommitteeUpdate = styled.div``
+const CommitteeAdd = styled.div``
+
+const DeleteButton = styled.button`
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
+    color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
+    cursor: pointer;
+    margin-top: ${props=>props.mt==="filledup" ? "20px" : ""};
 `
 
 export const AllDuesViewMore = ({ data, close }) => {
@@ -478,6 +574,226 @@ export const PublicationViewMore = ({ data, close }) => {
                     <SubConBtn onClick={close} disabled={isLoading}>Close</SubConBtn>
                 </SubConBtnHold>
             </SubCon>
+        </BackDrop>
+      )
+}
+
+//COMMITTEE
+export const CommitteeViewMore = ({ data, close }) => {
+    const [options, setOpions] = useState("details")
+    const {register, handleSubmit,setValue, control} = useForm({
+        defaultValues: {
+            commitee_todo: {
+                how: [""]
+            }
+        }
+    })
+
+    const { register:membRegister , handleSubmit:membHandlerSubmit } = useForm()
+    
+    const { fields, append, remove } = useFieldArray({
+        name: "commitee_todo.how",
+        control
+    })
+
+    const queryClient = useQueryClient()
+
+    const { isLoading:updateLoading, mutate:updateMutate } = useMutation((payload)=>updateCommittee(payload), {
+        onMutate: () => {
+            toast.info("Committee Update in progress",{progressClassName:"toastProgress",icon:false})
+        },
+        onSuccess: () => {
+            toast.success("Committee Updated",{progressClassName:"toastProgress",icon:false})
+            queryClient.invalidateQueries("all-committees")
+            close()
+        },
+        onError: (error) => {
+            toast.error("Could not update committee")
+            if(error?.message?.response?.data?.message?.error){
+                toast.error(`Message: ${error.message.response.data.message.error}`, {autoClose: 9000})
+            }
+        }
+    })
+
+    const { mutate } = useMutation((payload)=>addMoreMembtoCommittee(payload),{
+        onMutate: () => {
+            toast.info("Adding Members in progress",{progressClassName:"toastProgress",icon:false})
+        },
+        onSuccess: () => {
+            toast.success("Members Added",{progressClassName:"toastProgress",icon:false})
+            queryClient.invalidateQueries("all-committees")
+            close()
+        },
+        onError: (error) => {
+            toast.error("Could not add members")
+            if(error?.message?.response?.data?.message?.error){
+                toast.error(`Message: ${error.message.response.data.message.error}`, {autoClose: 9000})
+            }
+        }
+    })
+
+    const { isLoading, isFetching, isError, data:membData } = useQuery("all-members",getAllMembers, {
+        refetchOnWindowFocus: false,
+        select: data => {
+            const membArray = data.data.map(item => {
+                return {id:item.id, email:item.email}
+            })
+
+            const result = membArray.sort((a,b)=> a.id - b.id)
+            return result;
+        }
+    })
+
+    useEffect(()=>{
+        setValue("name", data?.name)
+        setValue("commitee_todo", data?.commitee_todo)
+    },[])
+
+    const onSubmit = (subData) => {
+        let { team_of_reference, commitee_todo, name } = subData
+        team_of_reference = team_of_reference[0]
+
+        const formData = new FormData()
+        formData.append("team_of_reference", team_of_reference)
+        formData.append("commitee_todo", JSON.stringify(commitee_todo))
+        formData.append("name", name)
+        
+        updateMutate([data.id, formData])
+    }
+
+    const addMembSubmit = (membData) => {
+        const formData = new FormData()
+        Object.keys(membData)?.forEach(key => formData.append(key, JSON.stringify(membData[key])))
+        formData.append("commitee_id", data.id)
+        mutate(formData)
+    }
+    return (
+        <BackDrop>
+            <style>
+                {`
+                    body{
+                        overflow:hidden;
+                    }
+                `}
+            </style>
+
+            {(isLoading || isFetching) ? <Loading loading={isLoading || isFetching}/> : (!isError) ? 
+            <>
+            
+                {data !== null ?
+                    <SubCon>
+                        <OptionHolder>
+                            <SubConHeader>
+                                <OptionItems selected={options==="details" ? "select" : ""} onClick={()=>setOpions("details")}>Committe Details</OptionItems>
+                            </SubConHeader>
+                            <SubConHeader>
+                                <OptionItems selected={options==="update" ? "select" : ""} onClick={()=>setOpions("update")}>Update Committee</OptionItems>
+                            </SubConHeader>
+                            <SubConHeader>
+                                <OptionItems selected={options==="add" ? "select" : ""} onClick={()=>setOpions("add")}>Add Members To Committee</OptionItems>
+                            </SubConHeader>
+                        </OptionHolder>
+
+                        {
+                            options === "details" ? 
+                            <CommitteeDetails>
+                                <PhotoHolderCon> <PhotoHolder alt='' src={data.team_of_reference}/> </PhotoHolderCon> 
+                                <SubConHeader2><TitleCon>Name: </TitleCon> {data.name}</SubConHeader2>
+
+                                <SubConHeader>Members Id's</SubConHeader>
+                                <CommitteeList>
+                                    {
+                                        data.connected_members.map((item,index) => (
+                                            <CommitteeListSpan key={index}>{item.id},</CommitteeListSpan>
+                                        ))
+                                    }
+                                </CommitteeList>
+
+                                <SubConHeader>Committee Todos</SubConHeader>
+                                <CommitteeList>
+                                    {
+                                        data.commitee_todo.how.map((item,index) => (
+                                            <CommitteeListItem key={index}>{item}</CommitteeListItem>
+                                        ))
+                                    }
+                                </CommitteeList>
+                                <SubConHeader>Committee Duties</SubConHeader>
+                                <CommitteeList>
+                                    {
+                                        data.commitee_todo.how.map((item,index) => (
+                                            <CommitteeListItem key={index}>{item}</CommitteeListItem>
+                                        ))
+                                    }
+                                </CommitteeList>
+                            </CommitteeDetails>
+                            :null
+                        }
+                        {
+                            options === "update" ?
+                            <CommitteeUpdate>
+                                <Form onSubmit={handleSubmit(onSubmit)}>
+                                    <FormLabel>
+                                        Name:
+                                        <FormDataComp type={"text"} {...register("name", {required:true})}/>
+                                    </FormLabel>
+
+                                    <FormLabel>
+                                        Images:
+                                        <FormDataComp type={"file"} accept="image/*" {...register("team_of_reference", {required:true})} />
+                                    </FormLabel>
+
+                                    {
+                                        fields.map((field, index)=>{
+                                            return(
+                                                <section key={field.id}>
+                                                    <FormLabel>
+                                                        Committee Todo:
+                                                        <FormDataComp type={"text"} {...register(`commitee_todo.how.${index}` , {required:true})}/>
+                                                    </FormLabel>
+                                                <DeleteButton typex="filled" type='button' onClick={() => remove(index)}>Delete</DeleteButton>
+                                                </section>
+                                            )
+                                        })
+                                    }
+                                        <DeleteButton type='button' mt="filledup" onClick={() => append("Enter Todo Details Here")}>Add Committee Todo</DeleteButton>
+                                    <SubConBtnHold>
+                                        <SubConBtnInput type={"submit"} value="Update" typex="filled"/>
+                                    </SubConBtnHold>
+                                </Form>
+                            </CommitteeUpdate>
+                            :null
+                        }
+                        {
+                            options === "add" ?
+                            <CommitteeAdd>
+                                <Form onSubmit={membHandlerSubmit(addMembSubmit)}>
+                                    <FormLabel>
+                                            Select Members To Add:
+                                            <FormSelection multiple defaultValue={[]} {...membRegister("members_list", {required:true})}>
+                                            <FormOption disabled value="">select an option</FormOption>
+                                            {
+                                                membData.map(item => (
+                                                    <FormOption key={item.id} value={item.id}>{item.id} || {item.email}</FormOption>
+                                                    ))
+                                            }
+                                        </FormSelection>
+                                    </FormLabel>
+
+                                    <SubConBtnInput type={"submit"} value="Update" typex="filled"/>
+                                </Form>
+
+                            </CommitteeAdd>
+                            :null
+                        }
+
+                        <SubConBtnHold>
+                            <SubConBtn onClick={close}>Close</SubConBtn>
+                        </SubConBtnHold>
+                    </SubCon>
+                : <small>can't fetch data</small>}
+            </>
+            
+            : <small>Can't fetch members</small> } 
         </BackDrop>
       )
 }

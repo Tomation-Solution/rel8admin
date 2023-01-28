@@ -89,15 +89,28 @@ const DashBoard = () => {
       <DashBoardRight>
         <DashBoardRightCon>
 
-          <DashBoardRightDue>
-            <DuesIcon style={{width:"50px", height:"50px"}}/>
-            <DashBoardRightDueHeader>1,700,700</DashBoardRightDueHeader>
-            <DashBoardRightDueSubHeader>Total Income this month</DashBoardRightDueSubHeader>
-            <DashBoardRightDueButton onClick={displayAddDueModal}>
-              <PlusCircleIcon style={{height:"25px",width:"25px"}}/>
-              Add Due
-            </DashBoardRightDueButton>
-          </DashBoardRightDue>
+          {
+            (adminDashLoading || adminDashFetching) ?
+            <Loading loading={adminDashLoading || adminDashFetching}/>
+            :
+            (!adminDashIsError) ? dashboardSummary.map((item, index) => {
+              if(Object.keys(item)[0] === "total_income") {
+                return (
+                  <DashBoardRightDue key={index}>
+                    <DuesIcon style={{width:"50px", height:"50px"}}/>
+                    <DashBoardRightDueHeader>{Object.values(item)[0]}</DashBoardRightDueHeader>
+                    <DashBoardRightDueSubHeader>Total Income this month</DashBoardRightDueSubHeader>
+                    <DashBoardRightDueButton onClick={displayAddDueModal}>
+                      <PlusCircleIcon style={{height:"25px",width:"25px"}}/>
+                      Add Payment
+                    </DashBoardRightDueButton>
+                  </DashBoardRightDue>
+                )
+              }
+            }
+            )
+            : <small>can't fetch summary data</small>
+          }
 
         </DashBoardRightCon>
       </DashBoardRight>

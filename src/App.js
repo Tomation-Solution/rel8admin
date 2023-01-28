@@ -14,6 +14,7 @@ import SideBar from "./components/SideBar/SideBar";
 import NotFound from "./components/NotFound/NotFound";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Meetings from "./components/Meetings/Meetings";
 
 function App() {
   return (
@@ -27,12 +28,13 @@ function App() {
                   <Route path="/members" element={<Members />} />
                   <Route path="/settings" element={<Settings />}/>
                   <Route path="/events" element={<Events />}/>
-                  <Route path="/dues" element={<Dues />}/>
+                  <Route path="/payments" element={<Dues />}/>
                   <Route path="/news" element={<News />}/>
                   <Route path="/publications" element={<Publications />}/>
                   <Route path="/gallery" element={<Gallery />}/>
                   <Route path="/elections" element={<Election />}/>
                   <Route path="/committee" element={<Committee />}/>
+                  <Route path="/meetings" element={<Meetings />}/>
               </Route>
           <Route path="*" element={<NotFound />}/>
         </Routes>
