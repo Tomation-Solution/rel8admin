@@ -15,6 +15,7 @@ import NotFound from "./components/NotFound/NotFound";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Meetings from "./components/Meetings/Meetings";
+import Chapters from "./components/Chapters/Chapters";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                   <Route path="/elections" element={<Election />}/>
                   <Route path="/committee" element={<Committee />}/>
                   <Route path="/meetings" element={<Meetings />}/>
+                  <Route path="/chapters" element={<Chapters />} />
               </Route>
           <Route path="*" element={<NotFound />}/>
         </Routes>

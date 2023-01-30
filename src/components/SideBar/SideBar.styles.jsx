@@ -167,7 +167,7 @@ export const SideBarItem = styled.div`
         text-decoration: none;
         padding: 5px;
         border-radius: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         display: flex;
         align-items: center;
         font-size: 14px;

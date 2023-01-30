@@ -117,6 +117,14 @@ const SideBar = () => {
                         Meetings
                     </CustNavLink>
                 </SideBarItem>
+
+                <SideBarItem>
+                    <CustNavLink where={"/chapters"}>
+                        <EventsIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
+                        Chapters
+                    </CustNavLink>
+                </SideBarItem>
+
                 <SideBarItem>
                     <CustNavLink where={"/settings"}>
                         <SettingsIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
@@ -196,6 +204,14 @@ const SideBar = () => {
                         Meetings
                     </CustNavLink>
                 </SideBarItem>
+
+                <SideBarItem>
+                    <CustNavLink where={"/chapters"}>
+                        <EventsIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
+                        Chapters
+                    </CustNavLink>
+                </SideBarItem>
+
                 <SideBarItem>
                     <CustNavLink where={"/settings"}>
                         <SettingsIcon style={{width:"25px",height:"25px",marginRight:"10px"}}/>
