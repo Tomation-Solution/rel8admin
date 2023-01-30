@@ -91,6 +91,7 @@ const SubConBtn = styled.input`
 const AddEvent = ({close}) => {
     const {register, handleSubmit, watch} = useForm({
         defaultValues: {
+            amount: 0.000,
             scheduletype:"",
             schedule:[]
         }
@@ -121,7 +122,8 @@ const AddEvent = ({close}) => {
 
     const onSubmit = (data) => {
         const image = data.image[0]
-        const { image:img, ...newdata } = data
+        const { image:img,is_for_excos, ...newdata } = data
+        console.log(newdata)
         const payload = {image,...newdata}
         const formData = new FormData()
         Object.keys(payload)?.forEach(key => formData.append(key, payload[key]));
@@ -147,16 +149,18 @@ const AddEvent = ({close}) => {
                     Name:
                     <FormDataComp type={"text"} {...register("name", {required:true})}/>
                 </FormLabel>
-                <FormLabel>
-                    Amount:
-                    <FormDataComp type={"number"} min={0} {...register("amount", {required:true,min:{
-                        value: 0,
-                        message: "invalid amount"
-                    }})}/>
-                </FormLabel>
                 
                 <FormLabel>
                     For Excos:
+                    <FormSelection defaultValue={""} {...register("is_for_excos", {required:true})}>
+                        <FormOption disabled value="">select an option</FormOption>
+                        <FormOption value={true}>Yes</FormOption>
+                        <FormOption value={false}>No</FormOption>
+                    </FormSelection>
+                </FormLabel>
+
+                {watch("is_for_excos")==="true" && <FormLabel>
+                    Excos:
                     <FormSelection defaultValue={""} {...register("exco_id", {required:true})}>
                         <FormOption disabled value="">select an option</FormOption>
                         {
@@ -165,7 +169,7 @@ const AddEvent = ({close}) => {
                                 ))
                         }
                     </FormSelection>
-                </FormLabel>
+                </FormLabel>}
                
                 <FormLabel>
                     Is Virtual:
@@ -202,6 +206,17 @@ const AddEvent = ({close}) => {
                         <FormOption value={false}>No</FormOption>
                     </FormSelection>
                 </FormLabel>
+
+                {
+                    watch("is_paid_event")  === "true" && 
+                    <FormLabel>
+                        Amount:
+                        <FormDataComp type={"number"} min={0} {...register("amount", {required:true,min:{
+                            value: 0,
+                            message: "invalid amount"
+                        }})}/>
+                    </FormLabel>
+                }
 
                 <FormLabel>
                     Address:

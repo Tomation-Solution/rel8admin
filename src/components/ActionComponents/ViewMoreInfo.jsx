@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
-import { mobile } from '../../responsive'
+import { Desktop, K4, Laptop, mobile } from '../../responsive'
 import { addMoreMembtoCommittee, deleteDue, deleteEvents, deleteNews, deletePublication, getAllMembers, updateCommittee, updateEvent } from '../../utils/api-calls'
 import Loading from '../Loading/Loading'
 
@@ -28,6 +28,48 @@ const SubCon = styled.div`
     height: 500px;
     border-radius: 10px;
     padding: 20px;
+    text-align: center;
+    ${
+        Laptop({
+            width: "30%",
+        })
+    }
+    ${
+        Desktop({
+            width: "40%",
+        })
+    }
+    ${
+        K4({
+            width: "40%",
+        })
+    }
+`
+const LeftSubCon = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: ${rel8White};
+    width: 50%;
+    overflow-y: auto;
+    height: 500px;
+    border-radius: 10px;
+    padding: 20px;
+    ${
+        Laptop({
+            width: "30%",
+        })
+    }
+    ${
+        Desktop({
+            width: "30%",
+        })
+    }
+    ${
+        K4({
+            width: "30%",
+        })
+    }
 `
 const SubConHeader = styled.p`
     font-weight: 700;
@@ -37,7 +79,8 @@ const SubConHeader = styled.p`
 const SubConHeader2 = styled.p`
     margin-top: 20px;
     margin-bottom: 20px;
-    text-align: center;
+    /* text-align: center; */
+    font-size: 14px;
 `
 const SubConBtnHold = styled.div`
     display: flex;
@@ -56,6 +99,7 @@ const SubConBtn = styled.button`
     background-color: ${props=>props.typex==="filled" ? `${rel8Purple}`:`${rel8Pink}`};
     color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
     cursor: pointer;
+    margin: 5px;
     ${
         mobile({
             margin: "10px 0px",
@@ -103,12 +147,6 @@ const OptionItems = styled.span`
     margin: 10px;
     text-align: center;
     cursor: pointer;
-`
-const CommitteeDetails = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 `
 const CommitteeList = styled.div`
     text-align: center;
@@ -162,6 +200,10 @@ const SubConBtnInput = styled.input`
     color: ${props=>props.typex==="filled" ? `${rel8White}`:`${rel8Purple}`};
     cursor: pointer;
 `
+const CommitteeDetails = styled.div`
+    display: flex;
+    flex-direction: column;
+`
 const CommitteeUpdate = styled.div``
 const CommitteeAdd = styled.div``
 
@@ -174,7 +216,7 @@ const DeleteButton = styled.button`
     cursor: pointer;
     margin-top: ${props=>props.mt==="filledup" ? "20px" : ""};
 `
-
+//ALL DUES OR PAYMENTS
 export const AllDuesViewMore = ({ data, close }) => {
     const queryClient = useQueryClient()
 
@@ -205,7 +247,7 @@ export const AllDuesViewMore = ({ data, close }) => {
                 }
             `}
         </style>
-        <SubCon>
+        <LeftSubCon>
             <SubConHeader>More Details</SubConHeader>
             {data ? 
             <>
@@ -255,11 +297,12 @@ export const AllDuesViewMore = ({ data, close }) => {
                 <SubConBtn typex="filled" onClick={()=>deleteDues(data.id)} disabled={isLoading}>Delete</SubConBtn>
                 <SubConBtn onClick={close} disabled={isLoading}>Close</SubConBtn>
             </SubConBtnHold>
-        </SubCon>
+        </LeftSubCon>
     </BackDrop>
   )
 }
 
+//MEMBERS
 export const MembersDuesViewMore = ({ data, close }) => {
     return(
 
@@ -295,6 +338,7 @@ export const MembersDuesViewMore = ({ data, close }) => {
     )
 }
 
+//MEMBERS
 export const MembersDashViewMore = ({ data, close }) => {
     return (
         <BackDrop>
@@ -305,7 +349,7 @@ export const MembersDashViewMore = ({ data, close }) => {
                     }
                 `}
             </style>
-            <SubCon>
+            <LeftSubCon>
                 <SubConHeader>More Details</SubConHeader>
                 {data ? 
                 <>
@@ -330,7 +374,7 @@ export const MembersDashViewMore = ({ data, close }) => {
                 <SubConBtnHold>
                     <SubConBtn onClick={close}>Close</SubConBtn>
                 </SubConBtnHold>
-            </SubCon>
+            </LeftSubCon>
         </BackDrop>
     )
 }
@@ -384,7 +428,7 @@ export const EventsViewMore = ({ data, close }) => {
                     }
                 `}
             </style>
-            <SubCon>
+            <LeftSubCon>
                 <SubConHeader>More Details</SubConHeader>
                 {data ? 
                 <>
@@ -427,8 +471,8 @@ export const EventsViewMore = ({ data, close }) => {
                     return list
                 }).join(',') : <span>{data.schedule}</span> }</SubConHeader2>
                 <SubConHeader>Event Access</SubConHeader>
-                <SubConHeader2> <TitleCon>Link:</TitleCon> {data.event_access.link}</SubConHeader2>
-                <SubConHeader2> <TitleCon>Has Paid:</TitleCon>{data.event_access.has_paid ? "yes": "no"}</SubConHeader2>
+                <SubConHeader2> <TitleCon>Link: </TitleCon> {data.event_access.link}</SubConHeader2>
+                <SubConHeader2> <TitleCon>Has Paid: </TitleCon>{data.event_access.has_paid ? "yes": "no"}</SubConHeader2>
 
                 </>
                 : 
@@ -438,12 +482,12 @@ export const EventsViewMore = ({ data, close }) => {
                     <SubConBtn typex="filled" onClick={()=>updateEventHandler({event_id:data.id, switch_on:!data.is_active})} disabled={isLoading || updateLoading}>Update Status</SubConBtn>
                     <SubConBtn onClick={close} disabled={isLoading || updateLoading}>Close</SubConBtn>
                 </SubConBtnHold>
-            </SubCon>
+            </LeftSubCon>
         </BackDrop>
     )
 }
 
-
+//NEWS
 export const NewsViewMore = ({ data, close }) => {
     const queryClient = useQueryClient()
 
@@ -478,7 +522,7 @@ export const NewsViewMore = ({ data, close }) => {
                     }
                 `}
             </style>
-            <SubCon>
+            <LeftSubCon>
                 <SubConHeader>More Details</SubConHeader>
                 {data ? 
                 <>
@@ -506,11 +550,12 @@ export const NewsViewMore = ({ data, close }) => {
                     <SubConBtn typex="filled" disabled={isLoading} onClick={()=>deleteNewsHandler(data.id)}>Delete</SubConBtn>
                     <SubConBtn onClick={close} disabled={isLoading}>Close</SubConBtn>
                 </SubConBtnHold>
-            </SubCon>
+            </LeftSubCon>
         </BackDrop>
       )
 }
 
+//Publications
 export const PublicationViewMore = ({ data, close }) => {
     const queryClient = useQueryClient()
 
@@ -545,7 +590,7 @@ export const PublicationViewMore = ({ data, close }) => {
                     }
                 `}
             </style>
-            <SubCon>
+            <LeftSubCon>
                 <SubConHeader>More Details</SubConHeader>
                 {data ? 
                 <>
@@ -573,7 +618,7 @@ export const PublicationViewMore = ({ data, close }) => {
                     <SubConBtn typex="filled" onClick={()=>deleteNewsHandler(data.id)} disabled={isLoading}>Delete</SubConBtn>
                     <SubConBtn onClick={close} disabled={isLoading}>Close</SubConBtn>
                 </SubConBtnHold>
-            </SubCon>
+            </LeftSubCon>
         </BackDrop>
       )
 }
@@ -720,7 +765,7 @@ export const CommitteeViewMore = ({ data, close }) => {
                                 <SubConHeader>Committee Duties</SubConHeader>
                                 <CommitteeList>
                                     {
-                                        data.commitee_todo.how.map((item,index) => (
+                                        data.commitee_duties.how.map((item,index) => (
                                             <CommitteeListItem key={index}>{item}</CommitteeListItem>
                                         ))
                                     }

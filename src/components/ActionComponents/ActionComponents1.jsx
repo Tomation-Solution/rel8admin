@@ -264,7 +264,10 @@ export const EventsTable = ({show, data, deleteFn}) => {
                             return(<TableRow key={item.id}>
                                         <TableData>{item.id}</TableData>
                                         <TableData style={{overflowWrap: 'anywhere'}}>{item.name}</TableData>
+                                        {item.is_paid_event ? 
                                         <TableData>{Number(item.amount).toLocaleString("en-US")}</TableData>
+                                        :
+                                        <TableData>{Number("0.000").toLocaleString("en-US")}</TableData>}
                                         <TableData>
                                             <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
                                         </TableData>
@@ -366,7 +369,6 @@ export const  CommitteeTable = ({show, data, deleteFn}) => {
                                         <TableData>{item.name}</TableData>
                                         <TableData>
                                             <EllipsesIcon svgClick={deleteFn} itemInfo={()=>setSelected(item)} style={{cursor:"pointer",width:"25px",height:"25px"}}/>
-                                            {/* <PlusCircleIcon style={{cursor:"pointer",width:"25px",height:"25px"}}/> */}
 
                                         </TableData>
                                     </TableRow>)

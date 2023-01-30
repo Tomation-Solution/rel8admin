@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { mobile } from '../../responsive'
-import { createPublication, getListOfExcos } from '../../utils/api-calls'
+import { createPublication, getAllCommittee, getListOfExcos } from '../../utils/api-calls'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import Loading from '../Loading/Loading'
@@ -130,6 +130,14 @@ const AddPublications = ({close}) => {
                 return data.data.map(item => ({id:item.id, name:item.name})).reverse()
             }
         })
+
+        const { isLoading:committeeLoading, isError:committeeError, isFetching:committeeFetching, data:committeeData } = useQuery("all-committees", getAllCommittee, {
+            refetchOnWindowFocus: false,
+            select: data=> {
+                const result = data.data.map(item => ({id:item.id, name:item.name}) )
+                return result.sort((a,b)=>a.id - b.id)
+            }
+          })
     
         const queryClient = useQueryClient()
     
@@ -172,7 +180,7 @@ const AddPublications = ({close}) => {
         `}
     </style>
 
-    { (excoListLoading || excoListFetching) ? <Loading loading={excoListLoading || excoListFetching}/>: (!excoListIsError) ?
+    { (excoListLoading || excoListFetching || committeeLoading || committeeFetching) ? <Loading loading={excoListLoading || excoListFetching || committeeLoading || committeeFetching}/>: (!excoListIsError || !committeeError) ?
     <SubCon>
         <SubConHeader>Add Publications</SubConHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -218,18 +226,19 @@ const AddPublications = ({close}) => {
                 </FormSelection>
             </FormLabel>
 
-               {/* {
-                    //COMMITTE NAME NEEDED
+            {
                     watch("is_committe")==="true" &&
                     <FormLabel>
                         Committe Name:
                         <FormSelection defaultValue={""} {...register("commitee_name", {required:true})}>
-                            <FormOption disabled value="">select an option</FormOption>
-                            <FormOption value={"James"}>Yes</FormOption>
-                            <FormOption value={"James"}>No</FormOption>
+                            {
+                                committeeData.map(item => (
+                                    <FormOption key={item.id} value={item.id}>{item.id} || {item.name}</FormOption>
+                                    ))
+                            }
                         </FormSelection>
                     </FormLabel>
-                } */}
+                }
 
                 <FormLabel>
                     Body:
