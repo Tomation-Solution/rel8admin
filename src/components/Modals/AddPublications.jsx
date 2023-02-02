@@ -115,7 +115,7 @@ const AddPublications = ({close}) => {
     const {register, handleSubmit, control, watch} = useForm({
         defaultValues: {
             publication_paragraph: [
-                { heading: "",paragraph: ""}
+                { heading: "",paragragh: ""}
             ]
         }
       })
@@ -256,7 +256,7 @@ const AddPublications = ({close}) => {
 
                                 <FormLabel>
                                     Paragraph:
-                                    <FormTextArea {...register(`publication_paragraph.${index}.paragraph`)}/>
+                                    <FormTextArea {...register(`publication_paragraph.${index}.paragragh`)}/>
                                 </FormLabel>
                                 <DeleteButton typex="filled" type='button' onClick={() => remove(index)}>Delete</DeleteButton>
                             </section>
@@ -265,7 +265,7 @@ const AddPublications = ({close}) => {
                 }
                 <DeleteButton type='button' mt="filledup" onClick={() => append({
                         heading: "New Heading",
-                        paragraph: "New Paragraph"
+                        paragragh: "New Paragraph"
                     })
                 }>Add New Paragraph Section</DeleteButton>
             

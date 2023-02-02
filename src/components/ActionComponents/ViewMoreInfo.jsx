@@ -5,10 +5,12 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import { rel8Pink, rel8Purple, rel8White } from '../../globals'
+import { PlusCircleIcon } from '../../assets/SideBar/svgs'
+import { rel8Black, rel8Blue, rel8Pink, rel8Purple, rel8White } from '../../globals'
 import { Desktop, K4, Laptop, mobile } from '../../responsive'
 import { addMoreMembtoCommittee, deleteDue, deleteEvents, deleteNews, deletePublication, getAllMembers, updateCommittee, updateEvent } from '../../utils/api-calls'
 import Loading from '../Loading/Loading'
+import ImageToShow from '../../assets/UploadImage.png'
 
 const BackDrop = styled.div`
     width: 100%;
@@ -20,6 +22,42 @@ const BackDrop = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`
+const VertSpaceBetween = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: ${rel8White};
+    width: 50%;
+    overflow-y: auto;
+    height: 500px;
+    border-radius: 10px;
+    padding: 20px;
+    ${
+        Laptop({
+            width: "30%",
+        })
+    }
+    ${
+        Desktop({
+            width: "30%",
+        })
+    }
+    ${
+        K4({
+            width: "30%",
+        })
+    }
+`
+const TopCon = styled.div``
+const AddCircleText = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 10px 0px;
 `
 const SubCon = styled.div`
     background-color: ${rel8White};
@@ -124,7 +162,7 @@ const ParagraphHeading = styled.p`
     font-size: 14px;
     margin-top: 20px;
     text-decoration: underline;
-    text-align: center;
+    /* text-align: center; */
 `
 const OptionHolder = styled.div`
     display: flex;
@@ -162,6 +200,19 @@ const Form = styled.form`
     margin: 20px 0px;
     display: flex;
     flex-direction: column;
+`
+const FormTextArea = styled.textarea`
+    padding: 5px 0px;
+    background-color: transparent;
+    border: none;
+    border: 1px solid ${rel8Purple};
+    border-radius: 5px;
+    padding: 5px;
+    color: ${rel8Purple};
+    outline: none;
+    &::placeholder{
+        color: ${rel8Purple};
+    }
 `
 const FormDataComp = styled.input`
     padding: 5px 0px;
@@ -216,6 +267,48 @@ const DeleteButton = styled.button`
     cursor: pointer;
     margin-top: ${props=>props.mt==="filledup" ? "20px" : ""};
 `
+const SmallTitle = styled.p`
+    font-size: 14px;
+    text-align: center;
+    margin: 10px 0px;
+`
+const ElectionResultGrid = styled.div`
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+    margin: 20px 0px;
+    ${
+        mobile({
+            gridTemplateColumns: "auto",
+        })
+    }
+`
+const ElectionResultGridItem = styled.div`
+    background-color: ${rel8Blue};
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 10px 0px;
+`
+const ElectionResultGridImage = styled.img`
+    height: 100px;
+    object-fit: contain;
+`
+const ElectionResultGridText = styled.div`
+    padding: 10px;
+`
+const ElectionResultGridTextHeading1 = styled.p`
+    color: ${rel8Purple};
+`
+const ElectionResultGridTextHeading2  = styled.p`
+    color: ${rel8Purple};
+`
+const ElectionResultGridTextSmall = styled.span`
+    font-size: 12px;
+    color: ${rel8Black};
+`
+
+
 //ALL DUES OR PAYMENTS
 export const AllDuesViewMore = ({ data, close }) => {
     const queryClient = useQueryClient()
@@ -314,7 +407,7 @@ export const MembersDuesViewMore = ({ data, close }) => {
                     }
                 `}
             </style>
-            <SubCon>
+            <LeftSubCon>
                 <SubConHeader>More Details</SubConHeader>
                 {data ? 
                 <>
@@ -333,7 +426,7 @@ export const MembersDuesViewMore = ({ data, close }) => {
                 <SubConBtnHold>
                     <SubConBtn onClick={close}>Close</SubConBtn>
                 </SubConBtnHold>
-            </SubCon>
+            </LeftSubCon>
         </BackDrop>
     )
 }
@@ -528,6 +621,10 @@ export const NewsViewMore = ({ data, close }) => {
                 <>
                     <PhotoHolderCon> <PhotoHolder alt='' src={data.image}/> </PhotoHolderCon> 
                     <SubConHeader2><TitleCon>Id: </TitleCon> {data.id}</SubConHeader2>
+                    {data.is_committe && <SubConHeader2><TitleCon>Committee id: </TitleCon> {data.commitee_name}</SubConHeader2>}
+                    {data.is_exco && <SubConHeader2><TitleCon>Exco id: </TitleCon> {data.exco}</SubConHeader2>}
+                    {data.is_member && <SubConHeader2><TitleCon>For Members: </TitleCon> {data.is_member ? "Yes" : "No"}</SubConHeader2>}
+                    
                     <SubConHeader2><TitleCon>Name: </TitleCon> {data.name}</SubConHeader2>
                     <SubConHeader><TitleCon>Body</TitleCon></SubConHeader>
                     <SubConHeader2 style={{wordWrap: "break-word"}}>{data.body}</SubConHeader2>
@@ -537,7 +634,7 @@ export const NewsViewMore = ({ data, close }) => {
                             return(
                                 <>
                                     {item.heading && <ParagraphHeading>{item.heading}</ParagraphHeading>}
-                                    <SubConHeader2 style={{wordWrap: "break-word"}}>{item.paragraph}</SubConHeader2>
+                                    <SubConHeader2 style={{wordWrap: "break-word"}}>{item.paragragh}</SubConHeader2>
                                 </>
                             )
                         })
@@ -596,6 +693,9 @@ export const PublicationViewMore = ({ data, close }) => {
                 <>
                     <PhotoHolderCon> <PhotoHolder alt='' src={data.image}/> </PhotoHolderCon> 
                     <SubConHeader2><TitleCon>Id: </TitleCon> {data.id}</SubConHeader2>
+                    {data.is_committe && <SubConHeader2><TitleCon>Committee id: </TitleCon> {data.commitee_name}</SubConHeader2>}
+                    {data.is_exco && <SubConHeader2><TitleCon>Exco id: </TitleCon> {data.exco}</SubConHeader2>}
+                    {data.is_member && <SubConHeader2><TitleCon>For Members: </TitleCon> {data.is_member ? "Yes" : "No"}</SubConHeader2>}
                     <SubConHeader2><TitleCon>Name: </TitleCon> {data.name}</SubConHeader2>
                     <SubConHeader><TitleCon>Body</TitleCon></SubConHeader>
                     <SubConHeader2 style={{wordWrap: "break-word"}}>{data.body}</SubConHeader2>
@@ -605,7 +705,7 @@ export const PublicationViewMore = ({ data, close }) => {
                             return(
                                 <>
                                     {item.heading && <ParagraphHeading>{item.heading}</ParagraphHeading>}
-                                    <SubConHeader2 style={{wordWrap: "break-word"}}>{item.paragraph}</SubConHeader2>
+                                    <SubConHeader2 style={{wordWrap: "break-word"}}>{item.paragragh}</SubConHeader2>
                                 </>
                             )
                         })
@@ -689,6 +789,7 @@ export const CommitteeViewMore = ({ data, close }) => {
         }
     })
 
+    // ISSUES HERE REAL ISSUES WITH THE DEPENDENCIES OF THE USE EFFECT
     useEffect(()=>{
         setValue("name", data?.name)
         setValue("commitee_todo", data?.commitee_todo)
@@ -841,4 +942,219 @@ export const CommitteeViewMore = ({ data, close }) => {
             : <small>Can't fetch members</small> } 
         </BackDrop>
       )
+}
+
+export const ElectionAddPosition = ({close}) => {
+    const { register, handleSubmit, control } = useForm({
+        defaultValues: {
+            positions: ["Input Position"]
+        }
+    })
+
+    const { fields, append, remove } = useFieldArray({
+        name: "positions",
+        control
+    })
+
+    const onSubmit = data => console.log(data)
+
+    return (
+        <BackDrop>
+            <style>
+                {`
+                    body{
+                        overflow:hidden;
+                    }
+                `}
+            </style>
+            <VertSpaceBetween>
+                <TopCon>
+                    <SubConHeader>Add Position</SubConHeader>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
+                        {
+                            fields.map((field, index)=>{
+                                return (
+                                    <>
+                                        <section key={field.id}>
+                                            <FormLabel>
+                                                <FormDataComp type={"text"} {...register(`positions.${index}`, {required:true})}/>
+                                            </FormLabel>
+                                            <DeleteButton typex="filled" type='button' onClick={() => remove(index)}>Delete</DeleteButton>
+                                        </section>
+                                    </>
+                                    
+                                )
+                            })
+                        }
+                        <AddCircleText onClick={()=>append("Input Position")}>
+                            <PlusCircleIcon style={{width:"20px", height: "20px",}}/>
+                            Add Position
+                        </AddCircleText>
+
+                        <SubConBtnHold>
+                            <SubConBtnInput type={"submit"} value="Done" typex="filled"/>
+                        </SubConBtnHold>    
+                    </Form>
+                </TopCon>
+
+                <SubConBtnHold>
+                    <SubConBtn onClick={close}>Close</SubConBtn>
+                </SubConBtnHold>
+            </VertSpaceBetween>
+        </BackDrop>
+    )
+}
+
+export const ElectionAddAspirant = ({close}) => {
+    const { register, handleSubmit, control } = useForm({
+        defaultValues: {
+            bio: ["Input Aspirant Bio Info"]
+        }
+    })
+
+    const { fields, append, remove } = useFieldArray({
+        name: "bio",
+        control
+    })
+
+    const onSubmit = data => console.log(data);
+
+    return (
+        <BackDrop>
+            <style>
+                {`
+                    body{
+                        overflow:hidden;
+                    }
+                `}
+            </style>
+            <VertSpaceBetween>
+                <TopCon>                    
+                    <SubConHeader>Add Aspirant</SubConHeader>
+
+                    <Form onSubmit={handleSubmit(onSubmit)}>
+                        <FormLabel>
+                             Position Name
+                             <FormSelection defaultValue={""} {...register("scheduletype", {required:true})}>
+                                <FormOption disabled value="">select an option</FormOption>
+                                <FormOption value="day_of_week">Day Of Week</FormOption>
+                                <FormOption value="month_of_year">Month of Year</FormOption>
+                            </FormSelection>
+                        </FormLabel>
+
+
+                        <FormLabel>
+                            Aspirant Name
+                            <FormDataComp type={"text"} {...register("name", {required: true})}/>
+                        </FormLabel>
+
+                        <FormLabel>
+                            Upload Aspirant Photo
+                            <FormDataComp type={"file"} accept="image/*" {...register("aspirant-photo", {required:true})}/>
+                        </FormLabel>
+
+                        {
+                            fields.map((field, index) => {
+                                return(
+                                    <section key={field.id}>
+                                        <FormLabel>
+                                            Aspirant Bio
+                                            <FormTextArea {...register(`bio.${index}`, {required:true})}/>
+                                        </FormLabel>
+
+                                        <DeleteButton typex="filled" type='button' onClick={() => remove(index)}>Delete</DeleteButton>
+                                    </section>
+                                )
+                            })
+                        }
+                        <AddCircleText onClick={()=>append("Input Aspirant Bio Info")}>
+                            <PlusCircleIcon style={{width:"20px", height: "20px",}}/>
+                            Add Aspirant Bio
+                        </AddCircleText>
+
+                        <FormLabel>
+                            Upload Manifesto Document
+                            <FormDataComp type={"file"} {...register("manifesto-docs", {required: true})}/>
+                        </FormLabel>
+                        
+                        <FormLabel>
+                            Upload Manifesto Video
+                            <FormDataComp type={"file"} accept="video/*" {...register("manifesto-video", {required: true})}/>
+                        </FormLabel>
+
+                        <FormLabel>
+                            Upload Manifesto Images
+                            <FormDataComp type={"file"} accept="image/*" multiple {...register("manifesto-images", {required: true})}/>
+                        </FormLabel>
+
+                        <SubConBtnHold>
+                            <SubConBtnInput type={"submit"} value="Done" typex="filled"/>
+                        </SubConBtnHold>  
+                    </Form>
+                </TopCon>
+
+                <SubConBtnHold>
+                    <SubConBtn onClick={close}>Close</SubConBtn>
+                </SubConBtnHold>
+            </VertSpaceBetween>
+        </BackDrop>
+    )
+}
+
+
+export const ElectionResult = ({close}) => {
+
+    return(
+        <BackDrop>
+            <style>
+                {`
+                    body{
+                        overflow:hidden;
+                    }
+                `}
+            </style>
+            <VertSpaceBetween>
+                <TopCon>                    
+                    <SubConHeader>ELECTION RESULTS</SubConHeader>
+                    <SmallTitle>So far, the results for the position of President of MAN</SmallTitle>
+
+                    <ElectionResultGrid>
+                        <ElectionResultGridItem>
+                            <ElectionResultGridImage alt='' src={ImageToShow}/>
+                            <ElectionResultGridText>
+                                <ElectionResultGridTextHeading1>
+                                    Name: <ElectionResultGridTextSmall>Olatunde Ajanyi</ElectionResultGridTextSmall>
+                                </ElectionResultGridTextHeading1>
+
+                                <ElectionResultGridTextHeading2>
+                                    Vote: <ElectionResultGridTextSmall>5</ElectionResultGridTextSmall>
+                                </ElectionResultGridTextHeading2>
+
+                            </ElectionResultGridText>
+                        </ElectionResultGridItem>
+                      
+                        <ElectionResultGridItem>
+                            <ElectionResultGridImage alt='' src={ImageToShow}/>
+                            <ElectionResultGridText>
+                                <ElectionResultGridTextHeading1>
+                                    Name: <ElectionResultGridTextSmall>Olatunde Ajanyi</ElectionResultGridTextSmall>
+                                </ElectionResultGridTextHeading1>
+
+                                <ElectionResultGridTextHeading2>
+                                    Vote: <ElectionResultGridTextSmall>5</ElectionResultGridTextSmall>
+                                </ElectionResultGridTextHeading2>
+
+                            </ElectionResultGridText>
+                        </ElectionResultGridItem>
+
+                    </ElectionResultGrid>
+
+                </TopCon>
+
+                <SubConBtnHold>
+                    <SubConBtn onClick={close}>Close</SubConBtn>
+                </SubConBtnHold>
+            </VertSpaceBetween>
+        </BackDrop>
+    )
 }

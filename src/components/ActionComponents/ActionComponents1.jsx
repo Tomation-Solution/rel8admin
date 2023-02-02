@@ -2,9 +2,9 @@ import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { CancelIcon, EditIcon, EllipsesIcon, PlusCircleIcon } from '../../assets/SideBar/svgs'
-import { rel8LightPink, rel8White } from '../../globals'
+import { rel8LightPink, rel8Purple, rel8White } from '../../globals'
 import { mobile } from '../../responsive'
-import { AllDuesViewMore, CommitteeViewMore, EventsViewMore, MembersDashViewMore, MembersDuesViewMore, NewsViewMore, PublicationViewMore } from './ViewMoreInfo'
+import { AllDuesViewMore, CommitteeViewMore, ElectionAddAspirant, ElectionAddPosition, ElectionResult, EventsViewMore, MembersDashViewMore, MembersDuesViewMore, NewsViewMore, PublicationViewMore } from './ViewMoreInfo'
 
 const Table = styled.table`
     width: 100%;
@@ -32,6 +32,28 @@ const TableData = styled.td`
         })
     }
 `
+const ElectionThemeHeader = styled.p`
+    font-size: 20px;
+    color: ${rel8Purple};
+    margin: 30px 20px;
+    text-decoration: underline;
+`
+
+const ActionBtns = styled.button`
+    padding: 10px;
+    background-color: ${rel8Purple};
+    border-radius: 10px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    color: ${rel8White};
+    ${
+        mobile({
+            fontSize:"10px",
+        })
+    }
+`
+
 export const NoAction = () => {
     return(
     <Table>
@@ -376,6 +398,96 @@ export const  CommitteeTable = ({show, data, deleteFn}) => {
                     }
                 </TableBody>
             </Table>
+        </>
+    )
+}
+
+//ELECTION
+export const  ElectionTable = () => {
+    const [ addPos, showAddPos ] = useState(false)
+    const [ addAsp, showAddAsp ] = useState(false)
+
+    const displayAddPos = () => {
+        showAddPos(!addPos)
+    }
+
+    const displayAddAsp = () => {
+        showAddAsp(!addAsp)
+    }
+
+    return(
+        <>
+            {addPos && <ElectionAddPosition close={displayAddPos}/>}
+            {addAsp && <ElectionAddAspirant close={displayAddAsp}/>}
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableData>Theme name</TableData>
+                        <TableData><ActionBtns onClick={displayAddPos}>Add Position</ActionBtns></TableData>
+                        <TableData><ActionBtns onClick={displayAddAsp}>Add Aspirant</ActionBtns></TableData>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </>
+    )
+}
+
+export const  ElectionResultTable = () => {
+    const [ showResult, setShowResult ] = useState(false)
+
+    const displayShowResult = () => {
+        setShowResult(!showResult) 
+    }
+
+    return(
+        <>
+        { showResult && <ElectionResult close={displayShowResult}/> }
+        <section>
+            <ElectionThemeHeader>ELECTION POSITION</ElectionThemeHeader>
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </section>
+        <section>
+            <ElectionThemeHeader>ELECTION POSITION</ElectionThemeHeader>
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                    <TableRow>
+                        <TableData>Position 1</TableData>
+                        <TableData><ActionBtns onClick={displayShowResult}>Show Result</ActionBtns></TableData>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </section>
         </>
     )
 }

@@ -38,7 +38,7 @@ const SubConHeader2 = styled.p`
 const SubConBtnHold = styled.div`
     display: flex;
     justify-content: space-evenly;
-    margin-top: 30px;
+    margin: 30px 0px;
 `
 const SubConBtn = styled.button`
     padding: 10px 20px;
@@ -66,7 +66,7 @@ const ImageCon = styled.div`
   }
 `
 const Image = styled.img`
-  height: 300px;
+  height: 200px;
   object-fit: contain;
 `
 
