@@ -159,7 +159,8 @@ const AddEvent = ({close}) => {
                     </FormSelection>
                 </FormLabel>
 
-                {watch("is_for_excos")==="true" && <FormLabel>
+                {/* {watch("is_for_excos")==="true" &&  */}
+                <FormLabel>
                     Excos:
                     <FormSelection defaultValue={""} {...register("exco_id", {required:true})}>
                         <FormOption disabled value="">select an option</FormOption>
@@ -169,7 +170,8 @@ const AddEvent = ({close}) => {
                                 ))
                         }
                     </FormSelection>
-                </FormLabel>}
+                </FormLabel>
+                {/* } */}
                
                 <FormLabel>
                     Is Virtual:

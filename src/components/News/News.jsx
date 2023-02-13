@@ -1,52 +1,81 @@
-import React, { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
-import { SearchIcon } from '../../assets/SideBar/svgs'
-import { getAllNews } from '../../utils/api-calls'
-import { NewsTable } from '../ActionComponents/ActionComponents1'
-import { EventsContainer, EventsHeader, EventsList } from '../Events/Events.styles'
-import Loading from '../Loading/Loading'
-import { AddNewBtn, MembersSearch, MembersSearchBtn, MembersSearchCompCon, MembersSearchInput } from '../Members/Members.styles'
-import AddNews from '../Modals/AddNews'
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { SearchIcon } from "../../assets/SideBar/svgs";
+import { getAllNews } from "../../utils/api-calls";
+import { NewsTable } from "../ActionComponents/ActionComponents1";
+import {
+  EventsContainer,
+  EventsHeader,
+  EventsList,
+} from "../Events/Events.styles";
+import Loading from "../Loading/Loading";
+import {
+  AddNewBtn,
+  MembersSearch,
+  MembersSearchBtn,
+  MembersSearchCompCon,
+  MembersSearchInput,
+} from "../Members/Members.styles";
+import AddNews from "../Modals/AddNews";
+import Pagination from "../Pagination/Pagination";
 
 const News = () => {
-    useEffect(()=>{
-        window.scrollTo(0,0)
-    },[])
-    const [showModal, setModal] = useState(false)
-    const [addNews, setAddNews] = useState(false)
-    const [searchValue, setSearchValue] = useState("")
-  
-    const displayModal = () => {
-      setModal(!showModal)
-    }
-    const displayAddNewsModal = () => {
-      setAddNews(!addNews)
-    }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  const [showModal, setModal] = useState(false);
+  const [addNews, setAddNews] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(10);
 
-    const { isLoading:newsLoading, isFetching:newsFetching, isError:newsError, data:newsData } = useQuery("all-news", getAllNews, {
-      refetchOnWindowFocus: false,
-      select: data => data.data
-    })
+  const displayModal = () => {
+    setModal(!showModal);
+  };
+  const displayAddNewsModal = () => {
+    setAddNews(!addNews);
+  };
 
-    const searchHandler = () => {
-      const searchPattern = new RegExp(searchValue,"i")
-      const result = newsData?.filter(item => (item.name.search(searchPattern) >= 0))
-      return result
-    }
+  const {
+    isLoading: newsLoading,
+    isFetching: newsFetching,
+    isError: newsError,
+    data: newsData,
+  } = useQuery("all-news", getAllNews, {
+    refetchOnWindowFocus: false,
+    select: (data) => data.data,
+  });
 
-    const searchResult = searchHandler()
+  const searchHandler = () => {
+    const searchPattern = new RegExp(searchValue, "i");
+    const result = newsData?.filter(
+      (item) => item.name.search(searchPattern) >= 0
+    );
+    return result;
+  };
+
+  const searchResult = searchHandler();
+
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+
+  const paginatedData = searchResult?.slice(firstPostIndex, lastPostIndex);
 
   return (
     <>
-    {addNews && <AddNews close={displayAddNewsModal}/>}
-    <EventsContainer>
+      {addNews && <AddNews close={displayAddNewsModal} />}
+      <EventsContainer>
         <EventsHeader>News</EventsHeader>
 
         <MembersSearch>
           <MembersSearchCompCon>
-            <MembersSearchInput value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} placeholder='Search'/>
+            <MembersSearchInput
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Search"
+            />
             <MembersSearchBtn onClick={searchHandler}>
-              <SearchIcon style={{width:"15px",height:"15x"}}/>
+              <SearchIcon style={{ width: "15px", height: "15x" }} />
             </MembersSearchBtn>
           </MembersSearchCompCon>
 
@@ -54,17 +83,28 @@ const News = () => {
         </MembersSearch>
 
         <EventsList>
-          {
-              searchResult?.length <= 0 ?
-              (newsLoading || newsFetching) ? <Loading loading={newsLoading || newsFetching}/> : (!newsError) ? <NewsTable show={showModal} deleteFn={displayModal} data={newsData}/> : <small>can't fetch news</small>
-              :
-              (newsLoading || newsFetching) ? <Loading loading={newsLoading || newsFetching}/> : (!newsError) ? <NewsTable show={showModal} deleteFn={displayModal} data={searchResult}/> : <small>can't fetch news</small>
-          }
+          {newsLoading || newsFetching ? (
+            <Loading loading={newsLoading || newsFetching} />
+          ) : !newsError ? (
+            <NewsTable
+              show={showModal}
+              deleteFn={displayModal}
+              data={paginatedData}
+            />
+          ) : (
+            <small>can't fetch news</small>
+          )}
         </EventsList>
 
-    </EventsContainer>
-  </>
-  )
-}
+        <Pagination
+          totalPosts={newsData?.length}
+          postsPerPage={postsPerPage}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
+      </EventsContainer>
+    </>
+  );
+};
 
-export default News
+export default News;
