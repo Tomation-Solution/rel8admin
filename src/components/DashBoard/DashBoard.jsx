@@ -25,10 +25,7 @@ import { useQuery } from "react-query";
 import {
   getAdminDashBoardDetails,
   getAllCouncils,
-  getAllExcos,
   getAllMembers,
-  getListOfExcos,
-  getMemOfCouncil,
 } from "../../utils/api-calls";
 import Loading from "../Loading/Loading";
 
@@ -56,17 +53,6 @@ const DashBoard = () => {
     refetchOnWindowFocus: false,
     select: (data) => data.data,
   });
-  // console.log("[EXCOS]", excoData);
-  const {
-    isLoading: memConcLoading,
-    isFetching: memConcFetching,
-    data: memConcData,
-    isError: memConcIsError,
-  } = useQuery("all-memConc", () => getMemOfCouncil(1), {
-    refetchOnWindowFocus: false,
-    select: (data) => data.data,
-  });
-  // console.log("[memConcData]", memConcData);
   const {
     isLoading: memLoading,
     isFetching: memFetching,
@@ -95,8 +81,6 @@ const DashBoard = () => {
     }
   }
 
-  // console.log(excoData)
-  // console.log("ALL MEMBERS",memData)
   return (
     <>
       {addDueModal && <AddDue close={displayAddDueModal} />}
@@ -128,7 +112,7 @@ const DashBoard = () => {
                 onClick={() => setOptions("exco")}
                 filled={options === "exco" ? "show" : ""}
               >
-                Excos
+                Council
               </DashBoardHeadersItem>
               <DashBoardHeadersItem
                 onClick={() => setOptions("mem")}
@@ -142,7 +126,7 @@ const DashBoard = () => {
               excoLoading || excoFetching ? (
                 <Loading loading={excoLoading || excoFetching} />
               ) : !excoIsError ? (
-                <ExcoDashTable deleteFn={displayModal} />
+                <ExcoDashTable data={excoData} />
               ) : (
                 <small>cant fetch excos</small>
               )
@@ -165,8 +149,9 @@ const DashBoard = () => {
             {adminDashLoading || adminDashFetching ? (
               <Loading loading={adminDashLoading || adminDashFetching} />
             ) : !adminDashIsError ? (
-              dashboardSummary.map((item, index) => {
-                if (Object.keys(item)[0] === "total_income") {
+              dashboardSummary
+                .filter((item) => Object.keys(item)[0] === "total_income")
+                .map((item, index) => {
                   return (
                     <DashBoardRightDue key={index}>
                       <DuesIcon style={{ width: "50px", height: "50px" }} />
@@ -184,8 +169,7 @@ const DashBoard = () => {
                       </DashBoardRightDueButton>
                     </DashBoardRightDue>
                   );
-                }
-              })
+                })
             ) : (
               <small>can't fetch summary data</small>
             )}

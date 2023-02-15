@@ -27,7 +27,7 @@ const News = () => {
   const [addNews, setAddNews] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage] = useState(10);
 
   const displayModal = () => {
     setModal(!showModal);

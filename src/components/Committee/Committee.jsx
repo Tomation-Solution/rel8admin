@@ -24,7 +24,7 @@ const Committee = () => {
   const [showAddCommittee, setShowAddCommittee] = useState(false);
   const [showModal, setModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage] = useState(10);
 
   const displayCommitteeModal = () => {
     setShowAddCommittee(!showAddCommittee);

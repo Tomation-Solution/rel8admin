@@ -12,10 +12,10 @@ import { mobile } from "../../responsive";
 import {
   AllDuesViewMore,
   CommitteeViewMore,
+  CouncilViewMore,
   ElectionAddAspirant,
   ElectionAddPosition,
   ElectionPosition,
-  ElectionResult,
   EventsViewMore,
   MeetingViewMore,
   MembersDashViewMore,
@@ -207,26 +207,43 @@ export const MemberDashTable = ({ deleteFn, data, show }) => {
   );
 };
 
-export const ExcoDashTable = ({ deleteFn }) => {
+export const ExcoDashTable = ({ data }) => {
+  const [selected, setSelected] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const displayModal = () => {
+    setShowModal(!showModal);
+  };
+
   return (
-    <Table>
-      <TableBody>
-        <TableRow>
-          <TableHead>Memeber</TableHead>
-          <TableHead>Hello</TableHead>
-        </TableRow>
-        <TableRow>
-          <TableData>Hello Content</TableData>
-          <TableData>Hello Content</TableData>
-          <TableData>
-            <CancelIcon
-              svgClick={deleteFn}
-              style={{ cursor: "pointer", width: "25px", height: "25px" }}
-            />
-          </TableData>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <>
+      {showModal && <CouncilViewMore close={displayModal} id={selected} />}
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableHead>Council</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+          {data.map((item) => {
+            return (
+              <TableRow key={item.id}>
+                <TableData>{item.name}</TableData>
+                <TableData>
+                  <ActionBtns
+                    onClick={() => {
+                      setSelected(item.id);
+                      displayModal();
+                    }}
+                  >
+                    Show Members
+                  </ActionBtns>
+                </TableData>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </>
   );
 };
 

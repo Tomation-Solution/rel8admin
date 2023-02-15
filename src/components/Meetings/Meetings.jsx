@@ -26,7 +26,7 @@ const Meetings = () => {
   const [addMeeting, setAddMeeting] = useState(false);
   const [addViewMoreModal, setAddViewMoreModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage] = useState(10);
 
   const displayAddMeeting = () => {
     setAddMeeting(!addMeeting);

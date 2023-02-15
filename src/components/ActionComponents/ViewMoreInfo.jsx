@@ -26,11 +26,11 @@ import {
   getAllMembers,
   getAllPositionsForElection,
   getContestantForPosition,
+  getMemOfCouncil,
   updateCommittee,
   updateEvent,
 } from "../../utils/api-calls";
 import Loading from "../Loading/Loading";
-import ImageToShow from "../../assets/UploadImage.png";
 
 const BackDrop = styled.div`
   width: 100%;
@@ -1929,6 +1929,59 @@ export const MeetingViewMore = ({ data, close }) => {
           </SubConBtn>
         </SubConBtnHold>
       </LeftSubCon>
+    </BackDrop>
+  );
+};
+
+//COUNCIL
+export const CouncilViewMore = ({ id, close }) => {
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    data: councilMember,
+  } = useQuery(`all-councilmemb-${id}`, () => getMemOfCouncil(id), {
+    refetchOnWindowFocus: false,
+    select: (data) => data.data,
+  });
+  return (
+    <BackDrop>
+      <style>
+        {`
+                    body{
+                        overflow:hidden;
+                    }
+                `}
+      </style>
+      {isLoading || isFetching ? (
+        <Loading loading={isLoading || isFetching} />
+      ) : !isError ? (
+        <LeftSubCon>
+          <SubConHeader>Member Details</SubConHeader>
+          {councilMember.map((item, index) => {
+            return (
+              <section key={index}>
+                <SubConHeader spaced="spaced">
+                  {index + 1}. MEMBER INFO
+                </SubConHeader>
+                {item?.member_info.map((item, index) => {
+                  return (
+                    <SubConHeader2 key={index}>
+                      {" "}
+                      <TitleCon>{item.name}: </TitleCon> {item.value}
+                    </SubConHeader2>
+                  );
+                })}
+              </section>
+            );
+          })}
+          <SubConBtnHold>
+            <SubConBtn onClick={close}>Close</SubConBtn>
+          </SubConBtnHold>
+        </LeftSubCon>
+      ) : (
+        <small>Can't fetch data</small>
+      )}
     </BackDrop>
   );
 };

@@ -32,7 +32,7 @@ const Dues = () => {
   const [addDueModal, setAddDueModal] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage] = useState(10);
 
   const [options, setOptions] = useState("all");
 
@@ -49,10 +49,10 @@ const Dues = () => {
     dueSummary,
     {
       refetchOnWindowFocus: false,
+      select: (data) => data.data,
     }
   );
 
-  console.log(data);
   const {
     isLoading: allLoading,
     isFetching: allFetching,
@@ -102,18 +102,41 @@ const Dues = () => {
 
   const paginatedData = searchResult?.slice(firstPostIndex, lastPostIndex);
 
+  const duesSummary = [];
+
+  if (data) {
+    data.forEach((item) => {
+      for (let [key, value] of Object.entries(item)) {
+        let info = { [key]: value };
+        duesSummary.push(info);
+      }
+    });
+  }
   return (
     <>
       {addDueModal && <AddDue close={displayAddDueModal} />}
       <DuesContainer>
-        <DuesHighlight>
-          <MemberDetBox
-            cirColor={"red"}
-            data={{ header: "$20,000", subheader: "Membership" }}
-          />
-          <MemberDetBox data={{ header: "$20,000", subheader: "Membership" }} />
-          <MemberDetBox data={{ header: "$20,000", subheader: "Membership" }} />
-        </DuesHighlight>
+        {isLoading || isFetching ? (
+          <Loading loading={isLoading || isFetching} />
+        ) : !isError ? (
+          <DuesHighlight>
+            {duesSummary.map((item, index) => {
+              return (
+                <MemberDetBox
+                  key={index}
+                  data={{
+                    header: Object.keys(item)[0]
+                      .replace(/_/g, " ")
+                      .toUpperCase(),
+                    subheader: Object.values(item)[0],
+                  }}
+                />
+              );
+            })}
+          </DuesHighlight>
+        ) : (
+          <small>can't fetch data</small>
+        )}
 
         <MembersPersonTab typex="dues">
           <MembersPersons

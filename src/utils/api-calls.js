@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { ninmRequest, privateRequest } from "./axios-utils"
+import { privateRequest } from "./axios-utils"
 
 //LOGIN
 export const loginUser = async (user) => {
@@ -403,16 +403,15 @@ export const getAllElections = async () => {
 //COUNCIL
 export const getAllCouncils = async () => {
     try{
-        const res = await ninmRequest.post(`/tenant/user/ManageAssigningExos/`)
+        const res = await privateRequest.get(`/tenant/user/ManageAssigningExos/`)
         return res.data
     }catch(e){
         throw new AxiosError(e)
     }   
 }
-
 export const getMemOfCouncil = async (id) => {
     try{
-        const res = await ninmRequest.post(`/tenant/user/council_members/${id}/`)
+        const res = await privateRequest.post(`/tenant/user/council_members/${id}/`)
         return res.data
     }catch(e){
         throw new AxiosError(e)

@@ -2,17 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { SearchIcon } from "../../assets/SideBar/svgs";
 import { getAllMembers } from "../../utils/api-calls";
-import {
-  AllMembersTable,
-  MemberDashTable,
-} from "../ActionComponents/ActionComponents1";
+import { MemberDashTable } from "../ActionComponents/ActionComponents1";
 import DeleteMember from "../DashBoard/DeleteMember";
 import Loading from "../Loading/Loading";
 import Pagination from "../Pagination/Pagination";
 import {
   MembersContainer,
-  MembersPaginationCon,
-  MembersPaginationItem,
   MembersPersonList,
   MembersPersons,
   MembersPersonTab,
@@ -30,7 +25,7 @@ const Members = () => {
   const [options, setOptions] = useState("all");
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage] = useState(10);
 
   const displayModal = () => {
     setModal(!showModal);

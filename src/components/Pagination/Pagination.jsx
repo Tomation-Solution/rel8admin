@@ -23,7 +23,7 @@ const Pagination = ({
           <MembersPaginationItem
             key={index}
             onClick={() => setCurrentPage(page)}
-            style={page == currentPage ? { color: "red" } : { color: "" }}
+            style={page === currentPage ? { color: "red" } : { color: "" }}
           >
             {page}
           </MembersPaginationItem>

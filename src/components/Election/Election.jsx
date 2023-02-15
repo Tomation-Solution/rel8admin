@@ -23,9 +23,6 @@ import {
   ElectionContainer,
   ElectionOptions,
   ElectionOptionsItem,
-  ElectionThemeHeader,
-  ElectionUploadReport,
-  ElectionUploadReportHolder,
 } from "./Election.styles";
 
 const Election = () => {
@@ -38,7 +35,7 @@ const Election = () => {
   const [setupModal, setHideSetupModal] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  const [postsPerPage] = useState(10);
 
   const {
     isLoading: electionLoading,
@@ -50,7 +47,6 @@ const Election = () => {
     select: (data) => data.data,
   });
 
-  const datax = [];
   const searchHandler = () => {
     const searchPattern = new RegExp(searchValue, "i");
     const result = electionData?.filter(
