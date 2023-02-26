@@ -1,4 +1,37 @@
-# Getting Started with Create React App
+# THIS IS THE REL 8 ADMIN PROJECT
+
+## Major Technologies Used
+
+1. **react**: frontend framework(no type script).
+2. **styled-components**: for styling.
+3. **react-router-dom**: for routing.
+4. **zustand**: for global state management and state perisitence to localstorage.
+5. **axios**: http client.
+6. **react-query**: for api response management.
+7. check the pacakge.json for the other packages
+
+# Project Structure (important files and what they do)
+
+#### src
+
+1. zustand folder: the global state manager made using zustand, stores the login cred. to localstorage
+2. responsive.js: used for style responsiveness. using styled-components css import.
+3. global.js: the color scheme.
+
+#### src/utils
+
+This folder controls the api calling and axios instance implementation
+
+#### src/components
+
+1. SideBar: contains the top navbar and the sidebar(also the reposnive one).
+2. Modals: All modals to create an new feature(payments, news, publications) are stored here.
+3. Dues: This represent the payment info, didnt change it so as to not affect imports
+4. **ActionComponents**: contains **ActionComponents1** and **ViewMoreInfo**
+   -- **ActionComponents1**: Store all the tables for each and every section.
+   -- **ViewMoreInfo**: Stores the modals for each tables action buttons. So if any table displays a modal after click of an action button the action button and it functionalities are stored here.
+
+### Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

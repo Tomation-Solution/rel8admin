@@ -1,4 +1,4 @@
-//NOT REALLY USED
+//NOT REALLY USED, THINK THIS IS USELESS YOU SHOULD BE ABLE TO DELETE IT
 import React from "react";
 import styled from "styled-components";
 import { rel8Pink, rel8Purple, rel8White } from "../../globals";
