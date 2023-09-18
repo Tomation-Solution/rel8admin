@@ -7,7 +7,7 @@ const TOKEN = adminDetails?.token
 const SHORT_NAME = JSON.parse(localStorage.getItem("shortName"))
 
 export const URLnAME = 'rel8backend-production-adfb.up.railway.app'
-export const BASE_URL = `https://rel8backend-production-adfb.up.railway.app/tenant/${SHORT_NAME}/`
+export const BASE_URL =  `https://rel8backend-production-adfb.up.railway.app/tenant/${SHORT_NAME}/`
 
 export const privateRequest = axios.create({
     baseURL: BASE_URL,
