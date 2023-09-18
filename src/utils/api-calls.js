@@ -5,6 +5,7 @@ import { BASE_URL, privateRequest, URLnAME } from "./axios-utils"
 export const loginUser = async (user) => {
     try{
         const { shortName, ...payload } = user
+        localStorage.setItem("shortName",shortName)
         const loginURL = `${BASE_URL}/tenant/auth/login/`
         const res = await axios.post(loginURL, payload)
         return res.data
