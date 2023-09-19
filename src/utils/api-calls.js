@@ -1,12 +1,12 @@
 import axios, { AxiosError } from "axios"
-import { BASE_URL, privateRequest, URLnAME } from "./axios-utils"
+import {  privateRequest, URLnAME } from "./axios-utils"
 
 //LOGIN
 export const loginUser = async (user) => {
     try{
         const { shortName, ...payload } = user
         localStorage.setItem("shortName",shortName)
-        const loginURL = `${BASE_URL}/tenant/auth/login/`
+        const loginURL = `http://${URLnAME}/tenant/${shortName}/tenant/auth/login/`
         const res = await axios.post(loginURL, payload)
         return res.data
     }catch(error){
