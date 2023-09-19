@@ -7,7 +7,7 @@ const TOKEN = adminDetails?.token
 let SHORT_NAME = localStorage.getItem("shortName")
 
 if(SHORT_NAME){
-    SHORT_NAME=JSON.parse(localStorage.getItem("shortName"))
+    SHORT_NAME=JSON.parse(SHORT_NAME)
 }
 
 export const URLnAME = 'rel8backend-production-adfb.up.railway.app'
