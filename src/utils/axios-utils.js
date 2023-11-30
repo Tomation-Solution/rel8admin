@@ -10,8 +10,8 @@ if(SHORT_NAME){
     SHORT_NAME=JSON.parse(SHORT_NAME)
 }
 
-export const URLnAME = 'rel8backend-production-adfb.up.railway.app'
-export const BASE_URL = `https://rel8backend-production-adfb.up.railway.app/tenant/${SHORT_NAME}/`
+export const URLnAME = 'rel8.watchdoglogisticsng.com'
+export const BASE_URL = `https://rel8.watchdoglogisticsng.com/tenant/${SHORT_NAME}/`
 
 export const privateRequest = axios.create({
     baseURL: BASE_URL,
