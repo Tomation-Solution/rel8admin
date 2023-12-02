@@ -936,9 +936,18 @@ export const NewsViewMore = ({ data, close }) => {
               <TitleCon>Body</TitleCon>
             </SubConHeader>
             <SubConHeader2 style={{ wordWrap: "break-word" }}>
-              {data.body}
+              {data?.body?
+              
+              <div 
+              dangerouslySetInnerHTML={{
+                __html: `${data.body}`,
+              }}
+              />
+              :''
+              
+            }
             </SubConHeader2>
-            <SubConHeader>
+            {/* <SubConHeader>
               <TitleCon>Paragraphs</TitleCon>
             </SubConHeader>
             {data.paragraphs.map((item) => {
@@ -952,7 +961,7 @@ export const NewsViewMore = ({ data, close }) => {
                   </SubConHeader2>
                 </>
               );
-            })}
+            })} */}
           </>
         ) : (
           <small>Can't fetch additional News Info.</small>
@@ -1052,10 +1061,21 @@ export const PublicationViewMore = ({ data, close }) => {
             <SubConHeader>
               <TitleCon>Body</TitleCon>
             </SubConHeader>
+
+
             <SubConHeader2 style={{ wordWrap: "break-word" }}>
-              {data.body}
+              {data?.body?
+              
+              <div 
+              dangerouslySetInnerHTML={{
+                __html: `${data.body}`,
+              }}
+              />
+              :''
+              
+            }
             </SubConHeader2>
-            <SubConHeader>
+            {/* <SubConHeader>
               <TitleCon>Paragraphs</TitleCon>
             </SubConHeader>
             {data.paragraphs.map((item) => {
@@ -1069,7 +1089,7 @@ export const PublicationViewMore = ({ data, close }) => {
                   </SubConHeader2>
                 </>
               );
-            })}
+            })} */}
           </>
         ) : (
           <small>Can't fetch additional Publication Info.</small>
