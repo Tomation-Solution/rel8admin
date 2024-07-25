@@ -6,14 +6,13 @@ type Props = {
     disabled?: boolean;
   };
   
-
-
-
   function TextEditor({ editorRef, disabled, initialValue }: Props) {
+    const apiKey = process.env.REACT_APP_TINYMCE_API_KEY;
+
     return (
       <>
         <Editor
-          apiKey=""
+          apiKey={apiKey}
           onInit={(_evt, editor) => (editorRef.current = editor)}
           initialValue={initialValue}
           disabled={disabled}
