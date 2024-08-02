@@ -97,6 +97,7 @@ export const getAllExcos = async () => {
 export const getListOfExcos = async () => {
     try{
         const res = await privateRequest.get('/tenant/user/ManageAssigningExos/')
+        console.log(res.data)
         return res.data
     }catch(e){
         throw new AxiosError(e)
