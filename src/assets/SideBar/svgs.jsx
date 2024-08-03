@@ -97,8 +97,9 @@ export const CommitteeIcon = ({style}) => (
 </svg>
 )
 
-export const EditProfileIcon = ({ style }) => (
-  <svg 
+export const EditProfileIcon = ({ style, svgClick, itemInfo }) => (
+  <svg
+  onClick={()=>{svgClick(); itemInfo();}} 
     style={style} 
     xmlns="http://www.w3.org/2000/svg" 
     viewBox="0 0 24 24" 

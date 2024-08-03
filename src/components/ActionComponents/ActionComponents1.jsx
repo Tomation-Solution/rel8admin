@@ -366,6 +366,8 @@ export const EventsTable = ({ show, data, deleteFn }) => {
                     style={{ cursor: "pointer", width: "25px", height: "25px" }}
                   />
                   <EditProfileIcon
+                  svgClick={deleteFn}
+                  itemInfo={() => setSelected(item)}
                   style={{ cursor: "pointer", width: "20px", height: "20px" }} />
                 </TableData>
               </TableRow>
