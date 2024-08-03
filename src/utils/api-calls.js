@@ -158,6 +158,27 @@ export const updateEvent = async (data) => {
     }
 }
 
+//-------------
+//PUBLIC MEMBERS
+export const getEventsPublicMembers = async (id) => {
+    try{
+        const res = await privateRequest.get(`/tenant/event/eventview/public_attendees_list/?event_id=${id}`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+//EXCOS MEMBERS
+export const getEventsExcosMembers = async (id) => {
+    try{
+        const res = await privateRequest.get(`/tenant/event/eventview/view_member_attendees/?event_id=${id}`) 
+        return res.data
+    }catch(e){
+        throw new AxiosError(e)
+    }
+}
+//-------------
+
 
 //NEWS
 export const createNews = async (payload) => {

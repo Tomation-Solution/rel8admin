@@ -6,6 +6,7 @@ import {
   EditIcon,
   EllipsesIcon,
   PlusCircleIcon,
+  EditProfileIcon
 } from "../../assets/SideBar/svgs";
 import { rel8LightPink, rel8Purple, rel8White } from "../../globals";
 import { mobile } from "../../responsive";
@@ -358,12 +359,14 @@ export const EventsTable = ({ show, data, deleteFn }) => {
                     {Number("0.000").toLocaleString("en-US")}
                   </TableData>
                 )}
-                <TableData>
+                <TableData style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
                   <EllipsesIcon
                     svgClick={deleteFn}
                     itemInfo={() => setSelected(item)}
                     style={{ cursor: "pointer", width: "25px", height: "25px" }}
                   />
+                  <EditProfileIcon
+                  style={{ cursor: "pointer", width: "20px", height: "20px" }} />
                 </TableData>
               </TableRow>
             );
