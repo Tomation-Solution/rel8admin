@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import {
@@ -24,6 +23,7 @@ import {
   NewsViewMore,
   PublicationViewMore,
 } from "./ViewMoreInfo";
+import EditEventModal from '../Modals/EditEvent';
 
 export const Table = styled.table`
   width: 100%;
@@ -328,12 +328,43 @@ export const MemDuesTable = ({ deleteFn, data, show }) => {
 };
 
 //EVENT
-export const EventsTable = ({ show, data, deleteFn }) => {
+export const EventsTable = ({ show, data, deleteFn, onUpdate }) => {
   const [selected, setSelected] = useState(null);
+  const [modalType, setModalType] = useState(null); 
+
+  const handleEdit = (item) => {
+    setSelected(item);
+    setModalType("edit");
+  };
+
+  const handleViewMore = (item) => {
+    setSelected(item);
+    setModalType("view");
+  };
+
+  const handleCloseModal = () => {
+    setSelected(null);
+    setModalType(null);
+  };
+
+  const handleUpdate = (updatedEvent) => {
+    onUpdate(updatedEvent);
+  };
 
   return (
     <>
-      {show && <EventsViewMore data={selected} close={deleteFn} />}
+      {modalType === "edit" && (
+        <EditEventModal
+          show={modalType === "edit"}
+          onClose={handleCloseModal}
+          data={selected}
+          onSubmit={handleUpdate}
+        />
+      )}
+
+      {modalType === "view" && (
+        <EventsViewMore data={selected} close={handleCloseModal} />
+      )}
 
       <Table>
         <TableBody>
@@ -343,41 +374,46 @@ export const EventsTable = ({ show, data, deleteFn }) => {
             <TableHead>Amount</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
-          {data.map((item) => {
-            return (
-              <TableRow key={item.id}>
-                <TableData>{item.id}</TableData>
-                <TableData style={{ overflowWrap: "anywhere" }}>
-                  {item.name}
+          {data.map((item) => (
+            <TableRow key={item.id}>
+              <TableData>{item.id}</TableData>
+              <TableData style={{ overflowWrap: "anywhere" }}>
+                {item.name}
+              </TableData>
+              {item.is_paid_event ? (
+                <TableData>
+                  {Number(item.amount).toLocaleString("en-US")}
                 </TableData>
-                {item.is_paid_event ? (
-                  <TableData>
-                    {Number(item.amount).toLocaleString("en-US")}
-                  </TableData>
-                ) : (
-                  <TableData>
-                    {Number("0.000").toLocaleString("en-US")}
-                  </TableData>
-                )}
-                <TableData style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-                  <EllipsesIcon
-                    svgClick={deleteFn}
-                    itemInfo={() => setSelected(item)}
-                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                  />
-                  <EditProfileIcon
-                  svgClick={deleteFn}
+              ) : (
+                <TableData>
+                  {Number("0.000").toLocaleString("en-US")}
+                </TableData>
+              )}
+              <TableData
+                style={{
+                  display: "flex",
+                  gap: "5px",
+                  justifyContent: "center",
+                }}
+              >
+                <EllipsesIcon
+                  svgClick={() => handleViewMore(item)}
                   itemInfo={() => setSelected(item)}
-                  style={{ cursor: "pointer", width: "20px", height: "20px" }} />
-                </TableData>
-              </TableRow>
-            );
-          })}
+                  style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                />
+                <EditProfileIcon
+                  svgClick={() => handleEdit(item)}
+                  style={{ cursor: "pointer", width: "20px", height: "20px" }}
+                />
+              </TableData>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </>
   );
 };
+
 
 //NEWS
 export const NewsTable = ({ show, data, deleteFn }) => {

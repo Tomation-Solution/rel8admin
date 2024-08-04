@@ -149,12 +149,31 @@ export const createEvents = async (data) => {
         throw new AxiosError(e)
     }
 }
-export const updateEvent = async (data) => {
+export const updateEventStatus = async (data) => {
     try{
         const res = await privateRequest.post('/tenant/event/eventview/activate_event/',data) 
         return res.data
     }catch(e){
         throw new AxiosError(e)
+    }
+}
+
+export const updateEvent = async (eventId, eventData) => {
+    try {
+        const formData = new FormData();
+        for (const key in eventData) {
+            if (eventData.hasOwnProperty(key)) {
+                formData.append(key, eventData[key]);
+            }
+        }
+        const res = await privateRequest.patch(`/tenant/event/eventview/${eventId}/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return res.data.data;
+    } catch (e) {
+        throw new AxiosError(e);
     }
 }
 
@@ -178,7 +197,6 @@ export const getEventsExcosMembers = async (id) => {
     }
 }
 //-------------
-
 
 //NEWS
 export const createNews = async (payload) => {

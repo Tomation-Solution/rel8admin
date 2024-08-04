@@ -30,7 +30,7 @@ import {
   getEventsPublicMembers,
   getMemOfCouncil,
   updateCommittee,
-  updateEvent,
+  updateEventStatus,
 } from "../../utils/api-calls";
 import Loading from "../Loading/Loading";
 
@@ -666,7 +666,7 @@ export const EventsViewMore = ({ data, close }) => {
   );
 
   const { isLoading: updateLoading, mutate: updateMutate } = useMutation(
-    (eventData) => updateEvent(eventData),
+    (eventData) => updateEventStatus(eventData),
     {
       onMutate: () => {
         toast.info("Event Update in progress", {
