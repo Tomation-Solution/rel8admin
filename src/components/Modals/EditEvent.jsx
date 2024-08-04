@@ -103,7 +103,7 @@ const EditEventModal = ({ show, onClose, data, onSubmit }) => {
     organiser_name: '',
     address: '',
     event_access: { link: '', has_paid: false },
-    // Add other fields as needed
+    // Add other fields as neededs
   });
 
   useEffect(() => {
