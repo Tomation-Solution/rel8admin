@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { rel8Pink, rel8Purple, rel8White } from "../../globals";
-import { mobile, tablet } from "../../responsive";
+import { rel8Pink, rel8Purple, rel8White } from "../../../globals";
+import { mobile, tablet } from "../../../responsive";
 
-export const MeetingsContainer = styled.div`
+export const FundProjectContainer = styled.div`
     margin-top: 67px;
     margin-left: 220px;
     padding: 50px 30px;
@@ -21,7 +21,7 @@ export const MeetingsContainer = styled.div`
         })
     }
 `
-export const MembersSearch = styled.div`
+export const FundProjectSearch = styled.div`
     margin: 40px 0px;
     display: flex;
     justify-content: space-between;
@@ -33,7 +33,7 @@ export const MembersSearch = styled.div`
         })
     }
 `
-export const MembersSearchCompCon = styled.div`
+export const FundProjectSearchCompCon = styled.div`
         width: 70%;
         display: flex;
         ${
@@ -42,7 +42,7 @@ export const MembersSearchCompCon = styled.div`
         })
     }
 `
-export const MembersSearchInput = styled.input`
+export const FundProjectSearchInput = styled.input`
     width: 80%;
     outline: none;
     padding: 20px;
@@ -61,7 +61,7 @@ export const MembersSearchInput = styled.input`
         })
     }
 `
-export const MembersSearchBtn = styled.button`
+export const FundProjectSearchBtn = styled.button`
     color: black;
     outline: none;
     padding: 20px;

@@ -114,3 +114,28 @@ export const EditProfileIcon = ({ style, svgClick }) => (
     <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
   </svg>
 );
+
+export const FundProjectIcon = ({style}) => (
+  <svg style={style} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l3 3m0 0l3-3m-3 3V6.75C6 5.784 6.784 5 7.75 5h.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-.5C6.784 9 6 9.784 6 10.75v.5m-3 3h6M12 5h6.75C19.216 5 20 5.784 20 6.75v10.5c0 .966-.784 1.75-1.75 1.75H12m0 0a3 3 0 100-6h-.25A3.25 3.25 0 008.5 18.25h3.25a3.25 3.25 0 001.749-.5H12z" />
+  </svg>
+);
+
+export const DeleteIcon = ({ style, svgClick }) => (
+  <svg
+    onClick={svgClick}
+    style={{ ...style, color: "red" }}
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-6 h-6"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a2 2 0 00-2 2v1h8V5a2 2 0 00-2-2m-4 0h4m1 5v10m-4-10v10m-4-10v10"
+    />
+  </svg>
+);

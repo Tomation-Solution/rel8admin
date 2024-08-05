@@ -376,6 +376,41 @@ export const deleteMeeting = async (id) => {
     }
 }
 
+//FUND A PROJECT
+export const createFundProjectApi = async (data) => {
+    try {
+      const res = await privateRequest.post(
+        "/tenant/extras/admin_manage_project/",
+        data
+      );
+      console.log(res.data);
+      return res.data;
+    } catch (e) {
+      throw new AxiosError(e);
+    }
+  };
+  export const getFundAProjects = async () => {
+    try {
+      const res = await privateRequest.get(
+        "/tenant/extras/admin_manage_project/"
+      );
+      return res.data;
+    } catch (e) {
+      throw new AxiosError(e);
+    }
+  };
+
+  export const deleteFundProjectApi = async (id) => {
+    try {
+      const res = await privateRequest.delete(
+        "/tenant/extras/admin_manage_project/" + id + "/"
+      );
+      return res.data;
+    } catch (e) {
+      throw new AxiosError(e);
+    }
+  };
+
 //ELECTIONS
 export const createElection = async (data) => {
     try{

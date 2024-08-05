@@ -5,7 +5,8 @@ import {
   EditIcon,
   EllipsesIcon,
   PlusCircleIcon,
-  EditProfileIcon
+  EditProfileIcon,
+  DeleteIcon
 } from "../../assets/SideBar/svgs";
 import { rel8LightPink, rel8Purple, rel8White } from "../../globals";
 import { mobile } from "../../responsive";
@@ -24,6 +25,7 @@ import {
   PublicationViewMore,
 } from "./ViewMoreInfo";
 import EditEventModal from '../Modals/EditEvent';
+import { useNavigate } from "react-router-dom";
 
 export const Table = styled.table`
   width: 100%;
@@ -636,6 +638,53 @@ export const ChaptersTable = ({ data }) => {
   );
 };
 
+//FUND A PROJECT
+export const FundAProjectTable = ({ data, show, deleteFn }) => {
+  const [selected, setSelected] = useState(null);
+  const navigate = useNavigate();
+  
+  return (
+    <Table>
+      <TableBody>
+        <TableRow>
+          <TableHead>Id</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>About</TableHead>
+          <TableHead>Needs</TableHead>
+          {/* <TableHead>Remove</TableHead> */}
+          <TableHead>Actions</TableHead>
+        </TableRow>
+        {data.map((item) => (
+          <TableRow key={item.id}>
+            <TableData>{item.id}</TableData>
+            <TableData>{item.heading}</TableData>
+            <TableData>{item.about.slice(0, 10)}...</TableData>
+            <TableData>{item.what_project_needs.join(', ')}</TableData>
+            <TableData>
+              <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', gap: '5px' }}>
+              <a
+                href=""
+                style={{ color: '#8A2BE2' }} // Assuming rel8Purple is a hex color code
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/fund_a_project/' + item.id);
+                }}
+              >View</a>
+              <DeleteIcon
+                svgClick={() => deleteFn(item.id)}
+                itemInfo={() => setSelected(item)}
+                style={{ cursor: 'pointer', width: '25px', height: '25px' }}
+              />
+              </div>
+            </TableData>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+// MEETINGS
 export const MeetingsTable = ({ show, data, deleteFn }) => {
   const [selected, setSelected] = useState(null);
 
